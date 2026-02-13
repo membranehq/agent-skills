@@ -3,8 +3,14 @@ name: self-integration
 description: Connect to any external app and perform actions on it. Use when the user wants to interact with external services like Slack, Linear, HubSpot, Salesforce, Jira, GitHub, Google Sheets, or any other app — send messages, create tasks, sync data, manage contacts, or perform any API operation.
 license: MIT
 metadata:
-  author: membranehq
+  author: Membrane Inc
   version: "1.0.0"
+  homepage: https://github.com/membranehq/agent-skills
+  openclaw:
+    requires:
+      env:
+        - MEMBRANE_TOKEN
+    primaryEnv: MEMBRANE_TOKEN
 ---
 
 # Self-Integration
@@ -16,7 +22,7 @@ Connect to any external app and perform actions on it. Uses the [Membrane](https
 All requests go to `${MEMBRANE_API_URL:-https://api.getmembrane.com}` with a Bearer token:
 
 ```
-Authorization: Bearer $MEMBRANE_API_TOKEN
+Authorization: Bearer $MEMBRANE_TOKEN
 Content-Type: application/json
 ```
 
@@ -40,7 +46,7 @@ If a matching connection exists and `disconnected` is `false`, skip to **Step 2*
 
 A connector is a pre-built adapter for an external app. Search by app name:
 
-`GET /search?q=<app name>`
+`GET /search?q=slack`
 
 Look for results with `elementType: "connector"`. Use `element.id` as `connectorId` in step 1d.
 
@@ -48,21 +54,13 @@ If nothing is found, go to step 1c to build a connector.
 
 #### 1c. Build a connector (if none exists)
 
-Use Membrane Agent. Provide the app name and URL if known:
+Create a Membrane Agent session to build a connector:
 
-`POST /agent/sessions` with body `{"prompt": "Build a connector for <app name> (<app url>)"}`
+`POST /agent/sessions` with body `{"prompt": "Build a connector for Slack (https://slack.com)"}`
 
-Poll until `state` is `"idle"` or `status` is `"completed"`:
+Adjust the prompt to describe the actual app you need. Poll `GET /agent/sessions/{sessionId}?wait=true&timeout=30` until `state` is `"idle"` or `status` is `"completed"`.
 
-`GET /agent/sessions/<sessionId>?wait=true&timeout=30`
-
-Send follow-up messages if needed:
-
-`POST /agent/sessions/<sessionId>/message` with body `{"input": "<message>"}`
-
-Abort if needed:
-
-`POST /agent/sessions/<sessionId>/interrupt`
+You can send follow-up instructions via `POST /agent/sessions/{sessionId}/message` or abort via `POST /agent/sessions/{sessionId}/interrupt`.
 
 After the connector is built, search for it again (step 1b).
 
@@ -70,7 +68,7 @@ After the connector is built, search for it again (step 1b).
 
 Create a connection request so the user can authenticate with the external app:
 
-`POST /connection-requests` with body `{"connectorId": "<connectorId>"}`
+`POST /connection-requests` with body `{"connectorId": "cnt_abc123"}`
 
 The response includes a `url`. **Tell the user to open the `url`** to complete authentication (OAuth, API key, etc.).
 
@@ -78,7 +76,7 @@ The response includes a `url`. **Tell the user to open the `url`** to complete a
 
 Poll until the user completes authentication:
 
-`GET /connection-requests/<requestId>`
+`GET /connection-requests/{requestId}`
 
 - `status: "pending"` — user hasn't completed yet, poll again.
 - `status: "success"` — done. Use `resultConnectionId` as the connection ID going forward.
@@ -92,7 +90,7 @@ An action is an operation you can perform on a connected app (e.g. "Create task"
 
 Search using a natural language description of what you want to do:
 
-`GET /actions?connectionId=<connectionId>&intent=<what you want to do>&limit=10`
+`GET /actions?connectionId=con_abc123&intent=send+a+message&limit=10`
 
 Each result includes `id`, `name`, `description`, `inputSchema` (what parameters the action accepts), and `outputSchema` (what it returns).
 
@@ -100,24 +98,26 @@ If no suitable action exists, go to step 2b.
 
 #### 2b. Build an action (if none exists)
 
-Use Membrane Agent. ALWAYS include the connection ID:
+Use Membrane Agent. ALWAYS include the connection ID in the prompt:
 
-`POST /agent/sessions` with body `{"prompt": "Create a tool to <describe what you need> for connection <connectionId>"}`
+`POST /agent/sessions` with body `{"prompt": "Create a tool to send a message in a channel for connection con_abc123"}`
 
-Poll for completion the same way as step 1c. After the action is built, search for it again (step 2a).
+Adjust the prompt to describe the actual action you need. Poll for completion the same way as step 1c. After the action is built, search for it again (step 2a).
 
 ### Step 3: Run an Action
 
 Execute the action using the action ID from step 2 and the connection ID from step 1:
 
-`POST /actions/<actionId>/run?connectionId=<connectionId>` with body `{"input": <parameters matching inputSchema>}`
+`POST /actions/{actionId}/run?connectionId=con_abc123` with body `{"input": {"channel": "#general", "text": "Hello!"}}`
+
+Provide `input` matching the action's `inputSchema`.
 
 The result is in the `output` field of the response.
 
 ## API Reference
 
 Base URL: `${MEMBRANE_API_URL:-https://api.getmembrane.com}`
-Auth header: `Authorization: Bearer $MEMBRANE_API_TOKEN`
+Auth header: `Authorization: Bearer $MEMBRANE_TOKEN`
 
 ### GET /connections
 
@@ -323,3 +323,20 @@ Response:
   "interrupted": "boolean"
 }
 ```
+
+## External Endpoints
+
+All requests go to the Membrane API. No other external services are contacted directly by this skill.
+
+| Endpoint | Data Sent |
+|---|---|
+| `${MEMBRANE_API_URL:-https://api.getmembrane.com}/*` | API token, connection parameters, action inputs, agent prompts |
+
+## Security & Privacy
+
+- All data is sent to the Membrane API over HTTPS.
+- `MEMBRANE_TOKEN` is a high-privilege credential that can create connections and run actions across external apps. Treat it as a secret.
+- Connection authentication (OAuth, API keys) is handled by Membrane — credentials for external apps are stored by the Membrane service, not locally.
+- Action inputs and outputs pass through the Membrane API to the connected external app.
+
+By using this skill, data is sent to [Membrane](https://getmembrane.com). Only install if you trust Membrane with access to your connected apps.

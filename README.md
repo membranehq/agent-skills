@@ -38,7 +38,7 @@ All skills require a Membrane API token:
 2. Get your API token from the [dashboard](https://console.getmembrane.com)
 3. Set the environment variable:
    ```bash
-   export MEMBRANE_API_TOKEN="your-token-here"
+   export MEMBRANE_TOKEN="your-token-here"
    ```
 
 Optionally set a custom API URL (defaults to `https://api.getmembrane.com`):
@@ -46,20 +46,6 @@ Optionally set a custom API URL (defaults to `https://api.getmembrane.com`):
 ```bash
 export MEMBRANE_API_URL="https://your-instance.example.com"
 ```
-
-## Creating New Skills
-
-Each skill lives in its own directory under `skills/`:
-
-```
-skills/
-  skill-name/
-    SKILL.md        # Required: frontmatter + instructions
-    scripts/        # Optional: executable scripts
-    references/     # Optional: additional documentation
-```
-
-The `SKILL.md` file uses YAML frontmatter with `name` and `description` fields, followed by Markdown instructions. See the [Agent Skills spec](https://agentskills.io/) for details.
 
 ## License
 
