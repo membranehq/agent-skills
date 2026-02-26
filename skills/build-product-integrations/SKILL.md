@@ -1,6 +1,6 @@
 ---
-name: build-integrated-apps
-description: Build apps that integrate with external services via Membrane. Use when the user wants to add integrations to their product — let their customers connect to Slack, HubSpot, Salesforce, GitHub, Google Sheets, Jira, or any other app, execute actions, sync data, or handle webhooks. Covers backend token generation, frontend connection UI, running actions, data collections, and AI agent tooling.
+name: build-product-integrations
+description: Add integrations to your product — let users connect to Slack, HubSpot, Salesforce, GitHub, Jira, and 100,000+ APIs. Connection UI, OAuth, actions, data sync, webhooks, and AI agent tools via Membrane.
 license: MIT
 metadata:
   author: Membrane Inc
@@ -219,7 +219,7 @@ function IntegrationsPage() {
 
 Use the Membrane API directly from your backend.
 
-Base URL: `https://api.getmembrane.com` (or `https://api.integration.app`)
+Base URL: `https://api.getmembrane.com`
 Auth: `Authorization: Bearer <token>`
 
 ```bash
@@ -249,7 +249,7 @@ POST /actions/<id>/run?connectionId=<cid>
 Membrane provides a pre-built connection UI that handles OAuth flows and credential collection:
 
 ```
-https://ui.integration.app/embed/integrations/{INTEGRATION_KEY}/connect?token={TOKEN}
+https://ui.getmembrane.com/embed/integrations/{INTEGRATION_KEY}/connect?token={TOKEN}
 ```
 
 Use in an iframe or redirect. Optional query params:
@@ -259,7 +259,7 @@ Use in an iframe or redirect. Optional query params:
 
 For reconnecting disconnected connections:
 ```
-https://ui.integration.app/embed/connections/{CONNECTION_ID}/refresh?token={TOKEN}
+https://ui.getmembrane.com/embed/connections/{CONNECTION_ID}/refresh?token={TOKEN}
 ```
 
 ## Running Actions
@@ -326,16 +326,6 @@ GET /actions?connectionId=abc123&intent=send+a+message
 ```
 
 This uses semantic search to find the best matching actions.
-
-### MCP Server
-
-Membrane provides an official MCP server for AI agents:
-
-```
-https://mcp.integration.app/sse?token={TOKEN}&productKey={PRODUCT_KEY}
-```
-
-Works with Claude, Cursor, and any MCP-compatible agent.
 
 ## Working with Membrane Agent
 
