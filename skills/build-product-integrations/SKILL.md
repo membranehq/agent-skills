@@ -1,6 +1,6 @@
 ---
-name: build-integrated-apps
-description: Build apps that integrate with external services via Membrane. Use when the user wants to add integrations to their product — let their customers connect to Slack, HubSpot, Salesforce, GitHub, Google Sheets, Jira, or any other app, execute actions, sync data, or handle webhooks. Covers backend token generation, frontend connection UI, running actions, data collections, and AI agent tooling.
+name: build-product-integrations
+description: Add integrations to your product — let users connect to Slack, HubSpot, Salesforce, GitHub, Jira, and 100,000+ APIs. Connection UI, OAuth, actions, data sync, webhooks, and AI agent tools via Membrane.
 license: MIT
 metadata:
   author: Membrane Inc
