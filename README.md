@@ -107,23 +107,6 @@ Done — your users can now connect Slack and receive notifications.
 
 ---
 
-## Setup
-
-All skills require a Membrane API token:
-
-1. Sign up at [getmembrane.com](https://getmembrane.com)
-2. Get your API token from the [dashboard](https://console.getmembrane.com)
-3. Set the environment variable:
-   ```bash
-   export MEMBRANE_TOKEN="your-token-here"
-   ```
-
-Optionally set a custom API URL (defaults to `https://api.getmembrane.com`):
-
-```bash
-export MEMBRANE_API_URL="https://your-instance.example.com"
-```
-
 ## Custom Agent Tools
 
 If you're building a custom agent and need Membrane tools embedded directly in your code, see [`agents/`](agents). Each subdirectory contains a ready-to-run agent example with the framework adapter:
