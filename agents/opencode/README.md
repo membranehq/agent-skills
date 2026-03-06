@@ -38,19 +38,16 @@ The Membrane tools will appear in OpenCode's tool list.
 Edit `.opencode/plugin/membrane.ts` to change which tools are available:
 
 ```typescript
-import { listConnections, searchTools, runTool } from "../../../../tools/self-integration"
+import { listConnections, searchTools, runTool } from '../../../../tools/integrate-anything'
 
 export const MembranePlugin: Plugin = async () => ({
-  tool: toOpenCodeTools(
-    { apiKey: process.env.MEMBRANE_TOKEN! },
-    [listConnections, searchTools, runTool],
-  ),
+  tool: toOpenCodeTools({ apiKey: process.env.MEMBRANE_TOKEN! }, [listConnections, searchTools, runTool]),
 })
 ```
 
 ## Files
 
-| File | Description |
-|------|-------------|
+| File                           | Description                                            |
+| ------------------------------ | ------------------------------------------------------ |
 | `.opencode/plugin/membrane.ts` | OpenCode plugin entry point — registers Membrane tools |
-| `.opencode/package.json` | Plugin dependencies |
+| `.opencode/package.json`       | Plugin dependencies                                    |

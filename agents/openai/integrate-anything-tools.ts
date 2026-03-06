@@ -1,30 +1,22 @@
-import { zodToJsonSchema } from "zod-to-json-schema"
-import {
-  type ToolDefinition,
-  type MembraneConfig,
-  allTools,
-} from "../../tools/self-integration"
+import { zodToJsonSchema } from 'zod-to-json-schema'
+
+import { type ToolDefinition, type MembraneConfig, allTools } from '../../tools/integrate-anything'
 
 export function toOpenAITools(tools: ToolDefinition[] = allTools) {
   return tools.map((t) => ({
-    type: "function" as const,
+    type: 'function' as const,
     function: {
       name: t.name,
       description: t.description,
-      parameters: zodToJsonSchema(t.parameters, { target: "openAi" }),
+      parameters: zodToJsonSchema(t.parameters, { target: 'openAi' }),
     },
   }))
 }
 
-export function createToolExecutor(
-  config: MembraneConfig,
-  tools: ToolDefinition[] = allTools,
-) {
+export function createToolExecutor(config: MembraneConfig, tools: ToolDefinition[] = allTools) {
   const toolMap = new Map(tools.map((t) => [t.name, t]))
 
-  return async (toolCall: {
-    function: { name: string; arguments: string }
-  }): Promise<string> => {
+  return async (toolCall: { function: { name: string; arguments: string } }): Promise<string> => {
     const tool = toolMap.get(toolCall.function.name)
     if (!tool) throw new Error(`Unknown tool: ${toolCall.function.name}`)
     const input = JSON.parse(toolCall.function.arguments)

@@ -29,14 +29,14 @@ This creates an `AgentExecutor` with a tool-calling agent, sends "List my connec
 - **Swap the model** — replace `ChatOpenAI` with any LangChain chat model (e.g. `ChatAnthropic`).
 - **Use a subset of tools** — pass an array to `toLangChainTools()`:
   ```typescript
-  import { listConnections, searchTools, runTool } from "../../tools/self-integration"
+  import { listConnections, searchTools, runTool } from '../../tools/integrate-anything'
   const tools = toLangChainTools(config, [listConnections, searchTools, runTool])
   ```
 - **Change the system prompt** — edit the `ChatPromptTemplate` in `example.ts`.
 
 ## Files
 
-| File | Description |
-|------|-------------|
+| File         | Description                                                                                              |
+| ------------ | -------------------------------------------------------------------------------------------------------- |
 | `adapter.ts` | `toLangChainTools()` — converts Membrane tool definitions to LangChain `DynamicStructuredTool` instances |
-| `example.ts` | Runnable agent executor example |
+| `example.ts` | Runnable agent executor example                                                                          |

@@ -29,14 +29,14 @@ This runs a minimal agent loop that sends "List my connections" to GPT-4o with M
 - **Swap the model** — change `"gpt-4o"` in `example.ts` to any OpenAI model.
 - **Use a subset of tools** — pass an array to `toOpenAITools()`:
   ```typescript
-  import { listConnections, searchTools, runTool } from "../../tools/self-integration"
+  import { listConnections, searchTools, runTool } from '../../tools/integrate-anything'
   const tools = toOpenAITools([listConnections, searchTools, runTool])
   ```
 - **Change the prompt** — edit the initial `messages` array in `example.ts`.
 
 ## Files
 
-| File | Description |
-|------|-------------|
+| File         | Description                                                                                                         |
+| ------------ | ------------------------------------------------------------------------------------------------------------------- |
 | `adapter.ts` | `toOpenAITools()` and `createToolExecutor()` — converts Membrane tool definitions to OpenAI function-calling format |
-| `example.ts` | Runnable chat completion loop with tool execution |
+| `example.ts` | Runnable chat completion loop with tool execution                                                                   |
