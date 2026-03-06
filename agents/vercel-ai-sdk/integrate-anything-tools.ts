@@ -1,9 +1,6 @@
-import { tool } from "ai"
-import {
-  type ToolDefinition,
-  type MembraneConfig,
-  allTools,
-} from "../../tools/self-integration"
+import { tool } from 'ai'
+
+import { type ToolDefinition, type MembraneConfig, allTools } from '../../tools/integrate-anything'
 
 export function toVercelTools(
   config: MembraneConfig,

@@ -29,14 +29,14 @@ This calls `generateText()` with Membrane tools and `maxSteps: 10`, letting the 
 - **Swap the model** — replace `openai("gpt-4o")` with any Vercel AI SDK provider (e.g. `anthropic("claude-sonnet-4-20250514")`).
 - **Use a subset of tools** — pass an array to `toVercelTools()`:
   ```typescript
-  import { listConnections, searchTools, runTool } from "../../tools/self-integration"
+  import { listConnections, searchTools, runTool } from '../../tools/integrate-anything'
   const tools = toVercelTools(config, [listConnections, searchTools, runTool])
   ```
 - **Streaming** — replace `generateText` with `streamText` for streaming responses.
 
 ## Files
 
-| File | Description |
-|------|-------------|
+| File         | Description                                                                         |
+| ------------ | ----------------------------------------------------------------------------------- |
 | `adapter.ts` | `toVercelTools()` — converts Membrane tool definitions to Vercel AI SDK tool format |
-| `example.ts` | Runnable example using `generateText()` with multi-step tool use |
+| `example.ts` | Runnable example using `generateText()` with multi-step tool use                    |

@@ -1,6 +1,6 @@
 ---
 name: build-product-integrations
-description: Add integrations to your product — let users connect to Slack, HubSpot, Salesforce, GitHub, Jira, and 100,000+ APIs. Connection UI, OAuth, actions, data sync, webhooks, and AI agent tools via Membrane.
+description: Build apps that integrate with external services via Membrane. Use when the user wants to add integrations to their product — let their customers connect to Slack, HubSpot, Salesforce, GitHub, Google Sheets, Jira, or any other app, execute actions, sync data, or handle webhooks. Covers backend token generation, frontend connection UI, running actions, data collections, and AI agent tooling.
 license: MIT
 metadata:
   author: Membrane Inc
@@ -65,6 +65,7 @@ Always follow this pattern when working with Membrane:
 3. **Delegate to Membrane Agent if it doesn't exist** — create an agent session to build the missing element
 
 Example: User wants to list Slack channels
+
 ```bash
 # Step 1: Search for a "list channels" action
 npx @membranehq/cli action list --connectionId <slack-conn-id> --intent "list channels" --limit 5 --json
@@ -79,6 +80,7 @@ npx @membranehq/cli agent-session get <sessionId> --wait --json
 ```
 
 Example: User wants to add a new app (e.g. Notion)
+
 ```bash
 # Step 1: Search for existing Notion connector
 npx @membranehq/cli search notion --elementType connector --json
@@ -137,7 +139,7 @@ function generateMembraneToken(customerId, customerName) {
     {
       issuer: process.env.MEMBRANE_WORKSPACE_KEY,
       expiresIn: '2h',
-    }
+    },
   )
 }
 ```
@@ -192,11 +194,13 @@ import { MembraneProvider, useIntegrations, useConnections, useMembrane } from '
 
 function App() {
   return (
-    <MembraneProvider fetchToken={async () => {
-      const res = await fetch('/api/membrane-token')
-      const { token } = await res.json()
-      return token
-    }}>
+    <MembraneProvider
+      fetchToken={async () => {
+        const res = await fetch('/api/membrane-token')
+        const { token } = await res.json()
+        return token
+      }}
+    >
       <IntegrationsPage />
     </MembraneProvider>
   )
@@ -219,7 +223,7 @@ function IntegrationsPage() {
 
 Use the Membrane API directly from your backend.
 
-Base URL: `https://api.getmembrane.com`
+Base URL: `https://api.getmembrane.com` (or `https://api.integration.app`)
 Auth: `Authorization: Bearer <token>`
 
 ```bash
@@ -249,17 +253,19 @@ POST /actions/<id>/run?connectionId=<cid>
 Membrane provides a pre-built connection UI that handles OAuth flows and credential collection:
 
 ```
-https://ui.getmembrane.com/embed/integrations/{INTEGRATION_KEY}/connect?token={TOKEN}
+https://ui.integration.app/embed/integrations/{INTEGRATION_KEY}/connect?token={TOKEN}
 ```
 
 Use in an iframe or redirect. Optional query params:
+
 - `redirectUri` — redirect back after connection
 - `allowMultipleConnections=1` — allow multiple connections per integration
 - `name` — pre-set connection name
 
 For reconnecting disconnected connections:
+
 ```
-https://ui.getmembrane.com/embed/connections/{CONNECTION_ID}/refresh?token={TOKEN}
+https://ui.integration.app/embed/connections/{CONNECTION_ID}/refresh?token={TOKEN}
 ```
 
 ## Running Actions
@@ -288,6 +294,7 @@ POST /actions/<actionId>/run?connectionId=abc123
 ```
 
 Each action has:
+
 - `id` — unique identifier
 - `name`, `description` — what it does
 - `inputSchema` — JSON Schema of accepted parameters
@@ -307,7 +314,7 @@ Use when you know which tools the agent needs before the session starts.
 2. Get actions for connection: `GET /actions?connectionId=<id>`
 3. Map to your agent's tool format:
    ```javascript
-   const tools = actions.items.map(action => ({
+   const tools = actions.items.map((action) => ({
      id: action.id,
      name: action.name,
      description: action.description,
@@ -321,11 +328,22 @@ Use when you know which tools the agent needs before the session starts.
 Use when tools depend on user intent or conversation context.
 
 Search actions by natural language intent:
+
 ```bash
 GET /actions?connectionId=abc123&intent=send+a+message
 ```
 
 This uses semantic search to find the best matching actions.
+
+### MCP Server
+
+Membrane provides an official MCP server for AI agents:
+
+```
+https://mcp.integration.app/sse?token={TOKEN}&productKey={PRODUCT_KEY}
+```
+
+Works with Claude, Cursor, and any MCP-compatible agent.
 
 ## Working with Membrane Agent
 
@@ -347,6 +365,7 @@ npx @membranehq/cli agent-session create --agent <agentName> --message "<descrip
 ```
 
 Available agent types:
+
 - `connection-building` — builds connectors for external apps
 - `action-building` — builds actions for connected apps
 - `membrane` — general-purpose Membrane agent (can build any element)
@@ -354,20 +373,24 @@ Available agent types:
 ### Agent Session Workflow
 
 1. **Create a session** with a clear description of what you need:
+
    ```bash
    npx @membranehq/cli agent-session create --agent action-building --message "Create an action to send a message in a Slack channel for connection abc123" --json
    ```
 
 2. **Poll until complete** — the agent works asynchronously:
+
    ```bash
    npx @membranehq/cli agent-session get <sessionId> --wait --json
    ```
+
    - `state: "busy"` — still working, poll again
    - `state: "idle"` — done with current request
    - `status: "completed"` — session finished
    - `summary` — description of what was done (available when idle)
 
 3. **Send follow-ups** if needed:
+
    ```bash
    npx @membranehq/cli agent-session send <sessionId> --message "Also add support for thread replies" --json
    ```
@@ -380,6 +403,7 @@ Available agent types:
 ### What to Delegate vs. What to Build
 
 **Delegate to Membrane Agent:**
+
 - Connectors (authentication, API clients, connection testing)
 - Actions (API mappings, input/output schemas, implementation logic)
 - Data Collections (field schemas, CRUD operations, pagination)
@@ -388,6 +412,7 @@ Available agent types:
 - Field Mappings (data transformation between apps)
 
 **Build yourself:**
+
 - Backend token generation endpoint
 - Frontend UI for displaying integrations and connections
 - Agent tool mapping (converting Membrane actions to your LLM's tool format)
@@ -397,6 +422,7 @@ Available agent types:
 ### Tips for Effective Agent Prompts
 
 When creating agent sessions, provide:
+
 - **Connection ID** — always include when building actions (`for connection abc123`)
 - **App name and URL** — when building connectors (`Build a connector for Notion (https://notion.so)`)
 - **Specific operation** — describe exactly what the action should do (`Create an action to list all tasks assigned to the current user`)
@@ -443,15 +469,18 @@ npx @membranehq/cli action list --connectionId abc123 --intent "create a task" -
 ### Connection Issues
 
 Check connection status:
+
 ```bash
 npx @membranehq/cli connection get <connectionId> --json
 ```
 
 Key fields:
+
 - `disconnected: true` — credentials expired or revoked, needs reconnection
 - `error` — details about what went wrong
 
 Reconnect:
+
 ```bash
 npx @membranehq/cli connect --connectionId <connectionId>
 ```
@@ -459,6 +488,7 @@ npx @membranehq/cli connect --connectionId <connectionId>
 ### Action Errors
 
 When an action fails, the response includes error details. Common issues:
+
 - **Missing required input** — check `inputSchema` for required fields
 - **Connection disconnected** — reconnect before retrying
 - **Rate limiting** — the external app is rate-limiting requests, retry after delay
@@ -467,6 +497,7 @@ When an action fails, the response includes error details. Common issues:
 ### Finding the Right Action
 
 If `action list --intent` doesn't return what you need:
+
 1. Try different phrasings of your intent
 2. List all actions without intent filter: `npx @membranehq/cli action list --connectionId abc123 --json`
 3. If the action doesn't exist, build it via Membrane Agent (see above)

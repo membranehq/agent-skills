@@ -1,9 +1,6 @@
-import { type Plugin, tool } from "@opencode-ai/plugin"
-import {
-  type ToolDefinition,
-  type MembraneConfig,
-  allTools,
-} from "../../../../tools/self-integration"
+import { type Plugin, tool } from '@opencode-ai/plugin'
+
+import { type ToolDefinition, type MembraneConfig, allTools } from '../../../../tools/integrate-anything'
 
 function toOpenCodeTools(
   config: MembraneConfig,
@@ -15,8 +12,7 @@ function toOpenCodeTools(
       tool({
         description: t.description,
         args: t.parameters.shape,
-        execute: (args) =>
-          t.execute(args, config).then((r) => JSON.stringify(r)),
+        execute: (args) => t.execute(args, config).then((r) => JSON.stringify(r)),
       }),
     ]),
   )
