@@ -7,7 +7,7 @@
     </picture>
   </a>
 
-  <h1><a hred="https://getmembrane.com">Membrane</a> Agent Skills</h1>
+  <h1>Agent Skills</h1>
 
   <p><strong>Agent skills for [Membrane](https://getmembrane.com) — reusable capabilities that let AI coding agents connect to external apps and perform actions.</strong></p>
 
