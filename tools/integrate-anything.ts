@@ -124,9 +124,9 @@ export const runTool = defineTool({
 export const ensureConnection = defineTool({
   name: 'ensure-connection',
   description:
-    'Find or create a connection. Searches existing connections, integrations, connectors, and apps. Returns the best match or creates a new one.',
+    'Find or create a connection to an external app by its URL or domain. Provide the app\'s URL (e.g. "https://slack.com") or bare domain (e.g. "slack.com") — the domain is extracted and matched against known apps to find or create a connection.',
   parameters: z.object({
-    intent: z.string().describe("Description of the app to connect to (e.g. 'Slack')"),
+    appUrl: z.string().describe('URL or domain of the app to connect to (e.g. "https://slack.com", "hubspot.com")'),
     name: z.string().optional().describe('Custom connection name'),
   }),
   execute: async (input, config) => {

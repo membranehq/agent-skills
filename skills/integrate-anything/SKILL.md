@@ -50,13 +50,19 @@ A connection is an authenticated link to an external app (e.g. a user's Slack wo
 
 #### 1a. Find or create a connection
 
-Use `connection ensure` to automatically search existing connections, integrations, connectors, and apps — and return the best match or create a new one:
+Use `connection ensure` to find or create a connection by app URL or domain:
 
 ```bash
-npx @membranehq/cli connection ensure "Slack" --json
+npx @membranehq/cli connection ensure "https://slack.com" --json
 ```
 
-This is the fastest way to get a connection. It searches in priority order: existing connections > integrations > connectors > external apps. If nothing is found, it creates a new connection and starts building a connector automatically.
+You can also use a bare domain:
+
+```bash
+npx @membranehq/cli connection ensure "slack.com" --json
+```
+
+This is the fastest way to get a connection. The URL is normalized to a domain and matched against known apps. If no app is found, one is created and a connector is built automatically.
 
 If the returned connection has `state: "READY"`, skip to **Step 2**.
 
@@ -159,7 +165,7 @@ All commands support `--json` for structured JSON output to stdout. Add `--works
 ### connection
 
 ```bash
-npx @membranehq/cli connection ensure <intent> [--name <name>] [--json]         # Find or create connection (recommended)
+npx @membranehq/cli connection ensure <appUrl> [--name <name>] [--json]         # Find or create connection by URL/domain (recommended)
 npx @membranehq/cli connection list [--json]                                    # List all connections
 npx @membranehq/cli connection get <id> [--wait] [--timeout <n>] [--json]       # Get connection (--wait to long-poll)
 npx @membranehq/cli connection create <intent> [--name <name>] [--json]         # Create connection with intent
@@ -191,7 +197,7 @@ Get the API token from the [Membrane dashboard](https://console.getmembrane.com)
 
 | CLI Command                                                  | API Equivalent                                                       |
 | ------------------------------------------------------------ | -------------------------------------------------------------------- |
-| `connection ensure "<text>" --json`                          | `POST /connections/ensure` with `{"intent": "<text>"}`               |
+| `connection ensure "<url>" --json`                           | `POST /connections/ensure` with `{"appUrl": "<url>"}`                |
 | `connection list --json`                                     | `GET /connections`                                                   |
 | `connection get <id> --wait --json`                          | `GET /connections/:id?wait=true`                                     |
 | `connection create "<text>" --json`                          | `POST /connections` with `{"intent": "<text>"}`                      |
