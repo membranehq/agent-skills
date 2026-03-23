@@ -1,7 +1,21 @@
-# Membrane Agent Skills
+<div align="center">
+  <a href="https://getmembrane.com">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset=".github/images/logo-light.png">
+      <source media="(prefers-color-scheme: light)" srcset=".github/images/logo-dark.png">
+      <img alt="Membrane" src=".github/images/logo-dark.png" width="300">
+    </picture>
+  </a>
 
-Agent skills for [Membrane](https://getmembrane.com) — reusable capabilities that let AI coding agents connect to external apps and perform actions.
+  <h1><a hred="https://getmembrane.com">Membrane</a> Agent Skills</h1>
 
+  <p><strong>Agent skills for [Membrane](https://getmembrane.com) — reusable capabilities that let AI coding agents connect to external apps and perform actions.</strong></p>
+
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
+  <a href="https://agentskills.io/"><img src="https://img.shields.io/badge/Agent_Skills-compatible-green.svg" alt="Agent Skills"></a>
+</div>
+
+<br>
 Built on the open [Agent Skills](https://agentskills.io/) specification. Works with Claude Code, OpenClaw, Cursor, GitHub Copilot, Gemini CLI, and other compatible agents.
 
 ## Installation
