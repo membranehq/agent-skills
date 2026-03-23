@@ -4,7 +4,7 @@ description: Build apps that integrate with external services via Membrane. Use 
 license: MIT
 metadata:
   author: Membrane Inc
-  version: '1.0.0'
+  version: '1.0.1'
   homepage: https://getmembrane.com
 ---
 
@@ -590,7 +590,7 @@ All requests go to the Membrane API. No other external services are contacted di
 
 - All data is sent to the Membrane API over HTTPS.
 - CLI credentials are stored locally in `~/.membrane/` with restricted file permissions.
-- Connection authentication (OAuth, API keys) is handled by Membrane — credentials for external apps are stored by the Membrane service, not locally.
+- Connection authentication (OAuth, API keys) is handled by [Membrane](https://getmembrane.com) — credentials for external apps are stored by the Membrane service, not locally.
 - Action inputs and outputs pass through the Membrane API to the connected external app.
 - Never expose your Workspace Secret to the frontend. Token generation must happen on your backend.
 
