@@ -44,6 +44,7 @@ npx skills add membranehq/agent-skills@integrate-anything
 | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | [integrate-anything](skills/integrate-anything/)                 | Connects agent to any external app on behalf of the user and lets it take any actions inside those apps      |
 | [build-product-integrations](skills/build-product-integrations/) | Build apps that integrate with external services — connection UI, running actions, data sync, AI agent tools |
+| [integration-development](skills/integration-development/) | Use this skill when writing code that reads, writes, syncs, or reacts to data in an external app. Applies to SaaS products, internal tools, scripts, batch jobs, and CLIs. The skill uses Membrane as the integration engine — it handles OAuth and credential lifecycle (authentication, token refresh, reconnect), exposes vendor operations through a uniform interface, delivers events via webhooks, generates connectors on demand for apps not yet in the workspace, and captures every action run and raw API exchange in structured logs. Works against any external app. |
 
 ## Setup
 
