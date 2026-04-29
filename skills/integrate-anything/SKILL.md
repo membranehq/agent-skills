@@ -158,6 +158,35 @@ Provide `--input` matching the action's `inputSchema`.
 
 The result is in the `output` field of the response.
 
+## Proxy requests
+
+When the available actions don't cover your use case, you can send requests directly to the connected app's API through Membrane's proxy. Membrane automatically appends the base URL to the path you provide and injects the correct authentication headers — including transparent credential refresh if they expire.
+
+```bash
+npx @membranehq/cli request <connectionId> /path/to/endpoint
+```
+
+Examples:
+
+```bash
+npx @membranehq/cli request <connectionId> /v1/me --json
+npx @membranehq/cli request <connectionId> /v1/messages -X POST -d '{"text":"hi"}' --json
+```
+
+Common options:
+
+| Flag | Description |
+|------|-------------|
+| `-X, --method` | HTTP method (GET, POST, PUT, PATCH, DELETE). Defaults to GET |
+| `-H, --header` | Add a request header (repeatable), e.g. `-H "Accept: application/json"` |
+| `-d, --data` | Request body. JSON strings are auto-parsed (use `--rawData` to send as a literal string) |
+| `--rawData` | Send `--data` as a plain string without JSON parsing |
+| `--query` | Query-string parameter (repeatable), e.g. `--query "limit=10"` |
+| `--pathParam` | Path parameter (repeatable), e.g. `--pathParam "id=123"` |
+| `--json` | Output the full response object (status, headers, body) as JSON |
+
+Use this for one-off raw API calls. If you need a reusable, schema-typed action that can be discovered and re-run, prefer `action create` (Step 2b) instead.
+
 ## CLI Reference
 
 All commands support `--json` for structured JSON output to stdout. Add `--workspaceKey <key>` and `--tenantKey <key>` to override project defaults.
@@ -186,6 +215,12 @@ npx @membranehq/cli action run <actionId> --connectionId <id> [--input <json>] [
 npx @membranehq/cli search <query> [--elementType <type>] [--limit <n>] [--json]   # Search connectors, integrations, etc.
 ```
 
+### request
+
+```bash
+npx @membranehq/cli request <connectionId> <path> [-X <method>] [-H <key:value>] [-d <body>] [--rawData] [--query <key=value>] [--pathParam <key=value>] [--json]   # Proxy a raw HTTP request to the connected app's API
+```
+
 ## Fallback: Raw API
 
 If the CLI is not available, you can make direct API requests.
@@ -206,6 +241,7 @@ Get the API token from the [Membrane dashboard](https://console.getmembrane.com)
 | `action create "<text>" --connectionId <cid> --json`         | `POST /actions` with `{"intent": "<text>", "connectionId": "<cid>"}` |
 | `action get <id> --wait --json`                              | `GET /actions/:id?wait=true`                                         |
 | `action run <id> --connectionId <cid> --input <json> --json` | `POST /actions/:id/run?connectionId=<cid>` with `{"input": <json>}`  |
+| `request <id> <path> [-X <method>] [-d <body>] ...`          | `POST /connections/:id/request` with `{"path", "method", "query"?, "pathParameters"?, "headers"?, "data"?}` |
 
 ## External Endpoints
 
