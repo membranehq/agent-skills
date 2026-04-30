@@ -122,12 +122,14 @@ The fastest path to a real response is `act` with an inline dispatch. **No "crea
 
 | Dispatch | When to use |
 |---|---|
-| `--api '<json>'` | You know the vendor's HTTP endpoint. Membrane handles auth + base URL. |
+| `--api '<json>'` | **First call after a fresh connection, and any one-off HTTP request.** Membrane handles auth + base URL. |
 | `--code '<js>'` | You need a small piece of logic (loop, transform, multi-step). |
 | `--key <key>` | You've previously saved this call as a reusable action. |
 | `--id <id>` | Same as `--key` but by id (use only when the action has no key). |
 
-### 2a. Inline `api` (recommended for one-off calls)
+### 2a. Inline `api` (recommended for the first call after a fresh connection, and for one-off calls)
+
+**Use this as the default for the very first call against a new connection.** It's the fastest way to confirm the connection works and to give the user a real response — no build step, no `BUILDING` state, no waiting.
 
 Pass an HTTP spec; Membrane proxies it through the connection's auth layer and base URL:
 
@@ -139,7 +141,7 @@ npx @membranehq/cli act --connectionKey slack-work \
 
 Spec shape: `{ method, path, body?, headers?, query? }`. The connector's base URL is prepended automatically. Auth is injected automatically.
 
-This replaces the older `action create` → `action run` flow for any call you're only going to make once. No build step, no `BUILDING` state, no waiting.
+Only escalate to a saved action (Step 3) if the user is going to run the same call repeatedly — saving has real value for repeat use, but adds latency and failure modes that are wasteful for first-call activation.
 
 ### 2b. Inline `code` (when you need logic, not just an HTTP call)
 
