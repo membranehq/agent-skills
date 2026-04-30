@@ -4,7 +4,7 @@ description: Connect to any external app and perform actions on it. Use when the
 license: MIT
 metadata:
   author: Membrane Inc
-  version: '1.5.0'
+  version: '2.0.0'
   homepage: https://getmembrane.com
 ---
 
@@ -12,243 +12,327 @@ metadata:
 
 Connect to any external app and perform actions on it. Uses the [Membrane](https://getmembrane.com) CLI.
 
-## Authentication
+**Always route through Membrane.** Don't hit vendor APIs directly. Membrane proxies every request through an authenticated connection and injects the right auth headers — including transparent credential refresh.
 
-Authenticate with the Membrane CLI:
+**Never handle external-app credentials yourself.** OAuth tokens, API keys, refresh tokens — Membrane stores and manages them server-side. Pass a `connectionKey` (or `connectionId`) and the tools call the vendor on your behalf.
+
+## Workflow
+
+1. **Authenticate with Membrane** (one-time per machine).
+2. **Ensure a connection** to the external app — find an existing one, reconnect a disconnected one, or create a new one.
+3. **Use the connection** to run actions or call the app's API.
+
+The rest of the skill is these three steps in detail.
+
+## Authentication
 
 ```bash
 npx @membranehq/cli login --tenant
 ```
 
-Alternatively, you can install the membrane CLI globally (`npm i -g @membranehq/cli@latest`) and use `membrane login --tenant` instead.
+`--tenant` gets a tenant-scoped token (workspace + customer) so you don't need to pass `--workspaceKey` and `--tenantKey` on every subsequent command.
 
-Always use `--tenant` to get a tenant-scoped token — this authenticates on behalf of a specific tenant (workspace + customer) in Membrane, so you don't need to pass `--workspaceKey` and `--tenantKey` on every subsequent command.
-
-This will either open a browser for authentication or print an authorization URL to the console, depending on whether interactive mode is available. The user authenticates in Membrane, then selects a workspace and tenant (user inside workspace).
-
-When login process is completed, the credentials are stored locally in `~/.membrane/credentials.json` and used in subsequent commands automatically.
-
-### Non-interactive Authentication
-
-If interactive browser login is not possible (e.g. remote/headless environment) the `membrane login` command will print an authorization URL to the terminal. The user can then open the URL in their browser and complete the login process.
-
-If this is the case, ask the user to enter the code they see in the browser after completing the login process.
-
-When user enters the code, complete the login process with:
+The command opens a browser. In headless environments it prints an authorization URL — ask the user to open it, complete the flow, and paste the code back; finish with:
 
 ```bash
 npx @membranehq/cli login complete <code>
 ```
 
-All commands below use `npx @membranehq/cli` (or just `membrane` if installed globally). Add `--json` to any command for machine-readable JSON output to stdout. Command without `--json` flag will print the result in a human-readable (and often shorter) format.
+Credentials are stored at `~/.membrane/credentials.json`. All later commands pick them up automatically.
 
-## Workflow
+If `npx` is awkward, install globally: `npm i -g @membranehq/cli@latest` and use plain `membrane …`. Add `--json` to any command for machine-readable output.
 
-### Step 1: Get a Connection
+## Step 1 — Get a connection
 
-A connection is an authenticated link to an external app (e.g. a user's Slack workspace, a HubSpot account). You need one before you can run actions.
+### 1a. Find an existing connection
 
-#### 1a. Find or create a connection
+```bash
+npx @membranehq/cli connection list --json
+```
 
-Use `connection ensure` to find or create a connection by app URL or domain:
+Each connection carries `id`, `key`, `integrationKey`, `state`. Scan for the target app and branch on `state`:
+
+- **`READY`** → use it. Skip to Step 2.
+- **`CLIENT_ACTION_REQUIRED`** (disconnected, needs re-auth) → **reconnect the existing connection**, do NOT create a new one:
+
+  ```bash
+  npx @membranehq/cli connect --connectionId <id>
+  ```
+
+  Creating a fresh connection while the old one is `CLIENT_ACTION_REQUIRED` leaves orphaned records and breaks anything that referenced the old `connectionKey`. Always reconnect.
+- **Multiple matches** (e.g. `slack-work` and `slack-personal`) → ask the user which to use. Don't guess.
+- **No match** → create a new one (Step 1b).
+
+### 1b. Create a new connection
+
+By URL or domain — shortest path:
 
 ```bash
 npx @membranehq/cli connection ensure "https://slack.com" --json
+# also accepts a bare domain: "slack.com"
 ```
 
-You can also use a bare domain:
+The URL is normalized to a domain and matched against known apps. If no app is found, one is created and a connector is built automatically.
+
+To set a stable, human-readable key for later lookup (especially for multi-account setups like `slack-work` + `slack-personal`), set it after creation:
 
 ```bash
-npx @membranehq/cli connection ensure "slack.com" --json
+npx @membranehq/cli connection patch <id> --data '{"connectionKey":"slack-work"}'
 ```
 
-This is the fastest way to get a connection. The URL is normalized to a domain and matched against known apps. If no app is found, one is created and a connector is built automatically.
-
-If the returned connection has `state: "READY"`, skip to **Step 2**.
-
-#### 1b. Wait for the connection to be ready
-
-If the connection is in `BUILDING` state, poll until it's ready:
+For the explicit multi-connection case (creating a second connection to an app you already have connected), use `connect`:
 
 ```bash
-npx @membranehq/cli connection get <id> --wait --json
+npx @membranehq/cli connect --integrationKey slack \
+  --connectionKey slack-personal --allowMultipleConnections
 ```
 
-The `--wait` flag long-polls (up to `--timeout` seconds, default 30) until the state changes. Keep polling until `state` is no longer `BUILDING`.
+### 1c. Drive the connection to `READY`
 
-The resulting state tells you what to do next:
+After 1a's reconnect or 1b's create, read `state` and follow the state machine:
 
-- **`READY`** — connection is fully set up. Skip to **Step 2**.
-- **`CLIENT_ACTION_REQUIRED`** — the user or agent needs to do something. The `clientAction` object describes the required action:
-  - `clientAction.type` — the kind of action needed:
-    - `"connect"` — user needs to authenticate (OAuth, API key, etc.). This covers initial authentication and re-authentication for disconnected connections.
-    - `"provide-input"` — more information is needed (e.g. which app to connect to).
-  - `clientAction.description` — human-readable explanation of what's needed.
-  - `clientAction.uiUrl` (optional) — URL to a pre-built UI where the user can complete the action. Show this to the user when present.
-  - `clientAction.agentInstructions` (optional) — instructions for the AI agent on how to proceed programmatically.
+- **`READY`** — done. Move to Step 2.
+- **`BUILDING`** — Membrane's builder agent is working. Wait:
 
-  After the user completes the action (e.g. authenticates in the browser), poll again with `connection get <id> --json` to check if the state moved to `READY`.
+  ```bash
+  npx @membranehq/cli connection get <id> --wait --json
+  ```
 
-- **`CONFIGURATION_ERROR`** or **`SETUP_FAILED`** — something went wrong. Check the `error` field for details.
+  `--wait` long-polls (up to `--timeout` seconds, default 30).
+- **`CLIENT_ACTION_REQUIRED`** — the user or agent must do something. The `clientAction` object describes what:
+  - `clientAction.type` — `"connect"` (auth flow) or `"provide-input"` (extra fields needed).
+  - `clientAction.agentInstructions` (optional) — **follow these verbatim if present**. They tell the agent how to drive the provider side of the flow programmatically. Don't shortcut to "paste this URL" — the instructions exist because the agent is expected to handle it.
+  - `clientAction.uiUrl` (optional) — a Membrane-hosted page where the user completes the action manually. Show this only when `agentInstructions` tells you to, or when no `agentInstructions` are present.
+  - `clientAction.description` — human-readable summary.
 
-#### Alternative: Create a connection with more control
+  When the action requires writing data back to the connection (e.g. captured OAuth credentials, custom params):
 
-If you need more control over the connection creation, you can use `connection create` instead:
+  ```bash
+  npx @membranehq/cli connection patch <id> --data '{"connectorParameters":{...},"input":{...}}'
+  ```
+
+  After the user completes their step, poll with `connection get <id> --wait --json` until `state` changes.
+- **`CONFIGURATION_ERROR`** / **`SETUP_FAILED`** — surface the `error` field to the user. These are terminal — don't retry blindly.
+
+## Step 2 — Use the connection
+
+The fastest path to a real response is `act` with an inline dispatch. **No "create action → wait → run" ceremony required.**
+
+`act` accepts exactly one of four dispatch styles:
+
+| Dispatch | When to use |
+|---|---|
+| `--api '<json>'` | You know the vendor's HTTP endpoint. Membrane handles auth + base URL. |
+| `--code '<js>'` | You need a small piece of logic (loop, transform, multi-step). |
+| `--key <key>` | You've previously saved this call as a reusable action. |
+| `--id <id>` | Same as `--key` but by id (use only when the action has no key). |
+
+### 2a. Inline `api` (recommended for one-off calls)
+
+Pass an HTTP spec; Membrane proxies it through the connection's auth layer and base URL:
 
 ```bash
-npx @membranehq/cli connection create "Connect to Slack" --json
+npx @membranehq/cli act --connectionKey slack-work \
+  --api '{"method":"POST","path":"/api/chat.postMessage","body":{"channel":"#general","text":"Hello"}}' \
+  --json
 ```
 
-This creates a new connection with an intent and starts building in the background. Then follow step 1b to wait for it.
+Spec shape: `{ method, path, body?, headers?, query? }`. The connector's base URL is prepended automatically. Auth is injected automatically.
 
-### Step 2: Get an Action
+This replaces the older `action create` → `action run` flow for any call you're only going to make once. No build step, no `BUILDING` state, no waiting.
 
-An action is an operation you can perform on a connected app (e.g. "Create task", "Send message", "List contacts").
-
-#### 2a. Search for actions
-
-Search using a natural language description of what you want to do:
+### 2b. Inline `code` (when you need logic, not just an HTTP call)
 
 ```bash
-npx @membranehq/cli action list --connectionId abc123 --intent "send a message" --limit 10 --json
+npx @membranehq/cli act --connectionKey hubspot \
+  --code 'module.exports = async ({ input, membrane }) => {
+    const all = []
+    let after
+    do {
+      const page = await membrane.api({ method: "GET", path: "/crm/v3/objects/contacts", query: { limit: 100, after } })
+      all.push(...page.results)
+      after = page.paging?.next?.after
+    } while (after)
+    return { count: all.length }
+  }' \
+  --input '{}' --json
 ```
 
-You should always search for actions in the context of a specific connection.
+The function receives `{ input, membrane, connection, integration }`. Use `membrane.api({ method, path, ... })` to make authenticated calls inside the function. Whatever you return becomes the response `output`.
 
-Each result includes `id`, `name`, `description`, `inputSchema` (what parameters the action accepts), and `outputSchema` (what it returns).
+### 2c. Reusable action by key (for repeat use)
 
-If no suitable action exists, go to step 2b.
-
-#### 2b. Create an action (if none exists)
-
-Describe what you want the action to do — Membrane will build it automatically using an agent:
+If the user is going to run the same call repeatedly, save it once and call it by `key`:
 
 ```bash
-npx @membranehq/cli action create "send a message in a channel" --connectionId abc123 --json
+npx @membranehq/cli act --key send-channel-message --connectionKey slack-work \
+  --input '{"channel":"#general","text":"Hello"}' --json
 ```
 
-This returns an action object. The action starts in `BUILDING` state while Membrane builds it in the background.
+See **Step 3** below for how to create a saved action.
 
-#### 2c. Wait for the action to be ready
+### 2d. Discover existing reusable actions
 
-Poll until the action leaves the `BUILDING` state:
+If you don't already know whether one exists:
+
+```bash
+# Ranked by semantic match against an intent
+npx @membranehq/cli action list --connectionKey slack-work --intent "send a message" --limit 10 --json
+
+# Catalog actions for one app (browse without a connection)
+npx @membranehq/cli external-app list --search slack --json   # → externalAppId
+npx @membranehq/cli action list --externalAppId <id> --json
+```
+
+Each result carries `id`, `key`, `name`, `description`, `inputSchema`, `outputSchema`. Read the `inputSchema` before running — it's authoritative.
+
+If nothing matches, fall back to inline `api` or `code` (above), or create a saved action (Step 3).
+
+## Step 3 — Save reusable actions (optional)
+
+When you find yourself about to make the same `act --api` call a second time, save it. Future calls become `act --key <key>` instead of the full inline spec.
+
+Two ways:
+
+**By intent** — describe what you want; Membrane builds the config and validates it:
+
+```bash
+npx @membranehq/cli action create "send a message in a channel" --connectionKey slack-work --json
+```
+
+The action returns in `state: BUILDING`. Wait for it:
 
 ```bash
 npx @membranehq/cli action get <id> --wait --json
 ```
 
-The `--wait` flag long-polls (up to `--timeout` seconds, default 30) until the state changes. Keep polling until `state` is no longer `BUILDING`.
-
-The resulting state tells you what to do next:
-
-- **`READY`** — action is fully built. Proceed to **Step 3**.
-- **`CONFIGURATION_ERROR`** or **`SETUP_FAILED`** — something went wrong. Check the `error` field for details.
-
-After the action is built, you can also search for it again (step 2a) to confirm.
-
-### Step 3: Run an Action
-
-Execute the action using the action ID from step 2 and the connection ID from step 1:
+**By explicit spec** — supply `type` + `config` directly. Common when lifting a tested inline `api` call into a saved action:
 
 ```bash
-npx @membranehq/cli action run <actionId> --connectionId abc123 --input '{"channel": "#general", "text": "Hello!"}' --json
+npx @membranehq/cli action create \
+  --key send-channel-message \
+  --type api-request-to-external-app \
+  --config '{"request":{"method":"POST","path":"/api/chat.postMessage"}}' \
+  --integrationKey slack --json
 ```
 
-Provide `--input` matching the action's `inputSchema`.
+Scope follows which fields you set:
+- `connectionKey` / `connectionId` → connection-level (tied to one connection)
+- `integrationKey` / `integrationId` (no connection) → integration-level (shared across every connection on that integration)
 
-The result is in the `output` field of the response.
-
-## Proxy requests
-
-When the available actions don't cover your use case, you can send requests directly to the connected app's API through Membrane's proxy. Membrane automatically appends the base URL to the path you provide and injects the correct authentication headers — including transparent credential refresh if they expire.
+Update / delete:
 
 ```bash
-npx @membranehq/cli request <connectionId> /path/to/endpoint
+npx @membranehq/cli action update <id-or-key> --data '<json-merge>'
+npx @membranehq/cli action delete <id-or-key>
 ```
 
-Examples:
+**Ask the user before saving** — they may want the action named, described, or kept inline.
+
+## Error recovery
+
+Read the response body — never branch on HTTP status alone. Three error paths:
+
+### 401 — Membrane auth is bad
+Your CLI session is invalid or expired. Run `membrane login --tenant` again.
+
+### Disconnected external-app connection
+The vendor's auth no longer works (token revoked, OAuth expired, credentials rotated). Read the connection state:
 
 ```bash
-npx @membranehq/cli request <connectionId> /v1/me --json
-npx @membranehq/cli request <connectionId> /v1/messages -X POST -d '{"text":"hi"}' --json
+npx @membranehq/cli connection get <id-or-key> --json
 ```
 
-Common options:
+If `state` is `CLIENT_ACTION_REQUIRED`, **reconnect the existing connection** (don't create a new one):
 
-| Flag | Description |
-|------|-------------|
-| `-X, --method` | HTTP method (GET, POST, PUT, PATCH, DELETE). Defaults to GET |
-| `-H, --header` | Add a request header (repeatable), e.g. `-H "Accept: application/json"` |
-| `-d, --data` | Request body. JSON strings are auto-parsed (use `--rawData` to send as a literal string) |
-| `--rawData` | Send `--data` as a plain string without JSON parsing |
-| `--query` | Query-string parameter (repeatable), e.g. `--query "limit=10"` |
-| `--pathParam` | Path parameter (repeatable), e.g. `--pathParam "id=123"` |
-| `--json` | Output the full response object (status, headers, body) as JSON |
+```bash
+npx @membranehq/cli connect --connectionId <id>
+```
 
-Use this for one-off raw API calls. If you need a reusable, schema-typed action that can be discovered and re-run, prefer `action create` (Step 2b) instead.
+After re-auth, retry the original `act` call.
+
+### Action failed
+Every `act` response carries `actionRunId`, on success AND on error. Pull the full log:
+
+```bash
+npx @membranehq/cli action-run-log get <actionRunId> --details --json
+```
+
+You get the mapped input, output, errors, plus the raw HTTP exchange with the external app.
 
 ## CLI Reference
 
-All commands support `--json` for structured JSON output to stdout. Add `--workspaceKey <key>` and `--tenantKey <key>` to override project defaults.
+All commands support `--json`. Add `--workspaceKey <key>` and `--tenantKey <key>` to override project defaults.
 
 ### connection
-
 ```bash
-npx @membranehq/cli connection ensure <appUrl> [--name <name>] [--json]         # Find or create connection by URL/domain (recommended)
-npx @membranehq/cli connection list [--json]                                    # List all connections
-npx @membranehq/cli connection get <id> [--wait] [--timeout <n>] [--json]       # Get connection (--wait to long-poll)
-npx @membranehq/cli connection create <intent> [--name <name>] [--json]         # Create connection with intent
+npx @membranehq/cli connection ensure <appUrl> [--name <n>] [--json]                       # Find or create by URL
+npx @membranehq/cli connection list [--json]
+npx @membranehq/cli connection get <id-or-key> [--wait] [--timeout <n>] [--json]
+npx @membranehq/cli connection patch <id> --data '<json>' [--json]
+npx @membranehq/cli connect --connectionId <id>                                              # Reconnect existing
+npx @membranehq/cli connect --integrationKey <k> [--connectionKey <k>] [--allowMultipleConnections]
 ```
 
-### action
-
+### act
 ```bash
-npx @membranehq/cli action list [--connectionId <id>] [--intent <text>] [--limit <n>] [--json]                  # List/search actions
-npx @membranehq/cli action create <intent> --connectionId <id> [--name <name>] [--json]                          # Create action with intent
-npx @membranehq/cli action get <id> [--wait] [--timeout <n>] [--json]                                            # Get action (--wait to long-poll)
-npx @membranehq/cli action run <actionId> --connectionId <id> [--input <json>] [--json]                          # Run an action
+npx @membranehq/cli act --connectionKey <k> --api  '<json>' [--input <json>] [--json]   # Inline HTTP
+npx @membranehq/cli act --connectionKey <k> --code '<js>'   [--input <json>] [--json]   # Inline JS
+npx @membranehq/cli act --connectionKey <k> --key  <k>      [--input <json>] [--json]   # Reusable
+npx @membranehq/cli act --connectionKey <k> --id   <id>     [--input <json>] [--json]   # Reusable by id
 ```
 
-### search
-
+### action (manage saved actions)
 ```bash
-npx @membranehq/cli search <query> [--elementType <type>] [--limit <n>] [--json]   # Search connectors, integrations, etc.
+npx @membranehq/cli action list   [--connectionKey <k>] [--externalAppId <id>] [--intent <t>] [--limit <n>] [--json]
+npx @membranehq/cli action create <intent> --connectionKey <k> [--json]                       # Build by intent
+npx @membranehq/cli action create --key <k> --type <t> --config '<json>' --integrationKey <k> [--json]   # Explicit spec
+npx @membranehq/cli action get    <id-or-key> [--wait] [--timeout <n>] [--json]
+npx @membranehq/cli action update <id-or-key> --data '<json>'                                  # Merge
+npx @membranehq/cli action delete <id-or-key>
 ```
 
-### request
-
+### action-run-log
 ```bash
-npx @membranehq/cli request <connectionId> <path> [-X <method>] [-H <key:value>] [-d <body>] [--rawData] [--query <key=value>] [--pathParam <key=value>] [--json]   # Proxy a raw HTTP request to the connected app's API
+npx @membranehq/cli action-run-log get <actionRunId> [--details] [--json]                      # Diagnostics for any /act call
+```
+
+### external-app / search
+```bash
+npx @membranehq/cli external-app list --search <query> --json
+npx @membranehq/cli search <query> [--elementType <type>] [--limit <n>] [--json]
 ```
 
 ## Fallback: Raw API
 
-If the CLI is not available, you can make direct API requests.
+If the CLI is not available, call the API directly.
 
 Base URL: `https://api.getmembrane.com`
 Auth header: `Authorization: Bearer $MEMBRANE_TOKEN`
 
-Get the API token from the [Membrane dashboard](https://console.getmembrane.com).
+Get the token from the [Membrane dashboard](https://console.getmembrane.com).
 
-| CLI Command                                                  | API Equivalent                                                       |
-| ------------------------------------------------------------ | -------------------------------------------------------------------- |
-| `connection ensure "<url>" --json`                           | `POST /connections/ensure` with `{"appUrl": "<url>"}`                |
-| `connection list --json`                                     | `GET /connections`                                                   |
-| `connection get <id> --wait --json`                          | `GET /connections/:id?wait=true`                                     |
-| `connection create "<text>" --json`                          | `POST /connections` with `{"intent": "<text>"}`                      |
-| `search <q> --json`                                          | `GET /search?q=<q>`                                                  |
-| `action list --connectionId <id> --intent <text> --json`     | `GET /actions?connectionId=<id>&intent=<text>`                       |
-| `action create "<text>" --connectionId <cid> --json`         | `POST /actions` with `{"intent": "<text>", "connectionId": "<cid>"}` |
-| `action get <id> --wait --json`                              | `GET /actions/:id?wait=true`                                         |
-| `action run <id> --connectionId <cid> --input <json> --json` | `POST /actions/:id/run?connectionId=<cid>` with `{"input": <json>}`  |
-| `request <id> <path> [-X <method>] [-d <body>] ...`          | `POST /connections/:id/request` with `{"path", "method", "query"?, "pathParameters"?, "headers"?, "data"?}` |
+| CLI Command | API Equivalent |
+|---|---|
+| `connection ensure "<url>" --json` | `POST /connections/ensure` with `{"appUrl": "<url>"}` |
+| `connection list --json` | `GET /connections` |
+| `connection get <id> --wait --json` | `GET /connections/:id?wait=true` |
+| `connection patch <id> --data <json>` | `PATCH /connections/:id` with `<json>` |
+| `connect --connectionId <id>` | `POST /connections/:id/reconnect` |
+| `act --connectionKey <k> --api <json>` | `POST /act` with `{"connectionKey":"<k>","api":<json>}` |
+| `act --connectionKey <k> --code <js>` | `POST /act` with `{"connectionKey":"<k>","code":"<js>"}` |
+| `act --connectionKey <k> --key <ak>` | `POST /act` with `{"connectionKey":"<k>","key":"<ak>","input":<json>}` |
+| `action list --connectionKey <k> --intent <t>` | `GET /actions?connectionKey=<k>&intent=<t>` |
+| `action create <intent> --connectionKey <k>` | `POST /actions` with `{"intent":"<t>","connectionKey":"<k>"}` |
+| `action get <id> --wait` | `GET /actions/:id?wait=true` |
+| `action-run-log get <actionRunId> --details` | `GET /action-run-logs/:id?details=true` |
 
 ## External Endpoints
 
 All requests go to the Membrane API. No other external services are contacted directly by this skill.
 
-| Endpoint                        | Data Sent                                                             |
-| ------------------------------- | --------------------------------------------------------------------- |
+| Endpoint | Data Sent |
+|---|---|
 | `https://api.getmembrane.com/*` | Auth credentials, connection parameters, action inputs, agent prompts |
 
 ## Security & Privacy
