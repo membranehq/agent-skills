@@ -222,12 +222,14 @@ Scope follows which fields you set:
 - `connectionKey` / `connectionId` → connection-level (tied to one connection)
 - `integrationKey` / `integrationId` (no connection) → integration-level (shared across every connection on that integration)
 
-Update / delete:
+Update / delete a connection-scoped action — **pass the same scope flag you created it with**:
 
 ```bash
-npx @membranehq/cli action update <id-or-key> --data '<json-merge>'
-npx @membranehq/cli action delete <id-or-key>
+npx @membranehq/cli action update <id-or-key> --connectionKey slack-work --data '<json-merge>'
+npx @membranehq/cli action delete <id-or-key> --connectionKey slack-work
 ```
+
+The `--connectionKey` (or `--connectionId`) flag is required when modifying connection-scoped actions in tenant mode — without it the CLI assumes you mean an integration-scoped action and rejects the call (integration-scoped actions need workspace-admin credentials, which this skill doesn't manage). If you only have the action id and don't know the connection, run `action get <id> --json` first and read `connectionId` off the response.
 
 **Ask the user before saving** — they may want the action named, described, or kept inline.
 
@@ -290,8 +292,8 @@ npx @membranehq/cli action list   [--connectionKey <k>] [--externalAppId <id>] [
 npx @membranehq/cli action create <intent> --connectionKey <k> [--json]                       # Build by intent
 npx @membranehq/cli action create --key <k> --type <t> --config '<json>' --integrationKey <k> [--json]   # Explicit spec
 npx @membranehq/cli action get    <id-or-key> [--wait] [--timeout <n>] [--json]
-npx @membranehq/cli action update <id-or-key> --data '<json>'                                  # Merge
-npx @membranehq/cli action delete <id-or-key>
+npx @membranehq/cli action update <id-or-key> --connectionKey <k> --data '<json>'              # Merge; scope flag required
+npx @membranehq/cli action delete <id-or-key> --connectionKey <k>
 ```
 
 ### action-run-log
