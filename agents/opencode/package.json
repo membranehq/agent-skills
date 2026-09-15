@@ -1,8 +1,0 @@
-{
-  "private": true,
-  "type": "module",
-  "dependencies": {
-    "@opencode-ai/plugin": "^1.2.6",
-    "zod": "^3.25.0"
-  }
-}

@@ -1,0 +1,36 @@
+{
+  "name": "membrane",
+  "version": "0.1.12965",
+  "description": "Audit your Amazon Ads account on your own computer, then hand the work you find to Membrane. Connect Amazon through Membrane's auth proxy; your data stays local.",
+  "author": {
+    "name": "Membrane",
+    "url": "https://membrane.agency"
+  },
+  "homepage": "https://membrane.agency/amazon",
+  "repository": "https://github.com/membranehq/agent-skills",
+  "license": "MIT",
+  "keywords": [
+    "membrane",
+    "amazon",
+    "amazon-ads",
+    "audit",
+    "ecommerce"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Membrane",
+    "shortDescription": "Audit your Amazon Ads, then hand the work to Membrane",
+    "longDescription": "Membrane runs Amazon accounts for brands. This plugin lets you start on your own computer: connect your Amazon Ads account through Membrane's auth proxy, pull 60 days of campaign data into a local database, and get an audit of wasted spend, budget limits, unharvested search terms, and structure problems. Nothing leaves your computer except the sign-in. When the audit finds work, the report links to Membrane's Amazon Ads job and names the findings file to share, so you can hand the work over on membrane.agency.",
+    "developerName": "Membrane",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://membrane.agency",
+    "defaultPrompt": [
+      "Audit my Amazon Ads account",
+      "What is wasting money in my Amazon ads?"
+    ]
+  }
+}

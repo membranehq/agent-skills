@@ -1,81 +1,66 @@
-<div align="center">
-  <a href="https://getmembrane.com">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset=".github/images/logo-light.png">
-      <source media="(prefers-color-scheme: light)" srcset=".github/images/logo-dark.png">
-      <img alt="Membrane" src=".github/images/logo-dark.png" width="300">
-    </picture>
-  </a>
+# Membrane for Amazon Ads
 
-  <h1>Agent Skills</h1>
+Audit your Amazon Ads account on your own computer. The plugin connects your advertising account, pulls the last 60 days of Sponsored Products data into a local database, and tells you what the ads are wasting and what they are missing. It runs in Claude Code, Codex CLI, and the ChatGPT desktop app.
 
-  <p><strong>Agent skills for [Membrane](https://getmembrane.com) — reusable capabilities that let AI coding agents connect to external apps and perform actions.</strong></p>
+Membrane runs Amazon accounts for brands. The audit is where a brand starts: it runs on your machine, it needs no Membrane account, and it shows you the work before you decide who does it.
 
-<a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
-<a href="https://agentskills.io/"><img src="https://img.shields.io/badge/Agent_Skills-compatible-green.svg" alt="Agent Skills"></a>
+This repository holds the built plugin. Membrane builds it from source and replaces this tree on every release.
 
-</div>
+## Install
 
-<br>
-Built on the open [Agent Skills](https://agentskills.io/) specification. Works with Claude Code, OpenClaw, Cursor, GitHub Copilot, Gemini CLI, and other compatible agents.
+Claude Code:
 
-## Installation
-
-Install all skills:
-
-```bash
-npx skills add membranehq/agent-skills
+```
+/plugin marketplace add membranehq/agent-skills
+/plugin install membrane@membrane
 ```
 
-Install a specific skill:
+Codex CLI:
 
-```bash
-npx skills add membranehq/agent-skills --skill integrate-anything
+```
+codex plugin marketplace add membranehq/agent-skills
+codex plugin add membrane@membrane
 ```
 
-Or using the shorthand:
+## Run the audit
 
-```bash
-npx skills add membranehq/agent-skills@integrate-anything
-```
+Ask your agent to audit your Amazon ads and it follows the steps. These are the commands behind them:
 
-## Available Skills
+- `membrane connect amazon-advertising` — opens Amazon's consent page, then stores the token on your computer.
+- `membrane ads profiles` — lists the advertising profiles on the account.
+- `membrane ads pull --profile <id>` — mirrors the account structure and starts five Sponsored Products reports over 60 days.
+- `membrane ads status --profile <id>` — says which of those reports Amazon has finished.
+- `membrane ads audit --profile <id>` — runs the rules over the pulled data.
+- `membrane ads report --profile <id>` — writes an HTML report and prints its path.
 
-| Skill                                                      | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [integrate-anything](skills/integrate-anything/)           | Connects agent to any external app on behalf of the user and lets it take any actions inside those apps                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| [integration-development](skills/integration-development/) | Use this skill when writing code that reads, writes, syncs, or reacts to data in an external app. Applies to SaaS products, internal tools, scripts, batch jobs, and CLIs. The skill uses Membrane as the integration engine — it handles OAuth and credential lifecycle (authentication, token refresh, reconnect), exposes vendor operations through a uniform interface, delivers events via webhooks, generates connectors on demand for apps not yet in the workspace, and captures every action run and raw API exchange in structured logs. Works against any external app. |
+Amazon can take 20 minutes or more to produce a report, so the pull returns at once and `membrane ads status` tells you when the data is in.
 
-## Setup
+`membrane ads audit --demo` runs the whole audit on sample data with no Amazon connection, so you can read the output before you connect anything.
 
-All skills require a Membrane API token:
+## What the audit finds
 
-1. Sign up at [getmembrane.com](https://getmembrane.com)
-2. Get your API token from the [dashboard](https://console.getmembrane.com)
-3. Set the environment variable:
-   ```bash
-   export MEMBRANE_TOKEN="your-token-here"
-   ```
+On the ads data alone: spend with no orders, campaigns with no impression, budgets set above what a campaign spends, dormant budgets in paused campaigns, brand terms in broad match, one keyword enabled in two ad groups, two ad groups on one product and target, off-Amazon placements, and every rate with its grade.
 
-Optionally set a custom API URL (defaults to `https://api.getmembrane.com`):
+Some rules need to know what a unit earns you. Pass a CSV with the columns `asin,contributionPerUnit,source,windowStart,windowEnd` to `--unit-costs`, and the audit also prices bids, budget moves, harvests of converting search terms, top-of-search adjustments, and campaign decisions. Without that file it names each of those rules as skipped. It never guesses a unit cost, and it never states a profit it cannot compute.
 
-```bash
-export MEMBRANE_API_URL="https://your-instance.example.com"
-```
+## Where your data lives
 
-## Custom Agent Tools
+Everything the audit reads and writes stays on your computer:
 
-If you're building a custom agent and need Membrane tools embedded directly in your code, see [`agents/`](agents). Each subdirectory contains a ready-to-run agent example with the framework adapter:
+- `~/.membrane/connections/amazon-advertising.json` — your Amazon access token and refresh token, readable only by you.
+- `~/.membrane/audits/<profileId>.sqlite` — the campaign, keyword, search-term and placement data the pull fetched.
+- `~/.membrane/reports/` — the HTML reports.
 
-| Agent                                  | Framework       |
-| -------------------------------------- | --------------- |
-| [openai](agents/openai/)               | OpenAI SDK      |
-| [vercel-ai-sdk](agents/vercel-ai-sdk/) | Vercel AI SDK   |
-| [langchain](agents/langchain/)         | LangChain       |
-| [opencode](agents/opencode/)           | OpenCode Plugin |
+The pull reads your data from Amazon's advertising API directly. Two requests go to Membrane, both to `auth.membrane.agency`: the Amazon sign-in, which goes through Membrane's auth proxy so Amazon's client secret never sits on your machine, and the refresh of an expired Amazon token. The plugin uploads no advertising data, and this version signs in to no Membrane account.
 
-Tool definitions live in [`tools/integrate-anything.ts`](tools/integrate-anything.ts).
+## Requirements
+
+Node 22.13 or newer. The audit database uses the SQLite built into Node, so there is nothing to compile and nothing else to install.
+
+## Hand the work over
+
+When the audit finds work worth doing, `membrane ads report` prints a link to Membrane's Amazon Ads job and the path of the findings file to share. Membrane works under a grant you give in Seller Central and end whenever you want, and a named operator is accountable for the result. The service and its prices are at https://membrane.agency/amazon.
 
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE).
