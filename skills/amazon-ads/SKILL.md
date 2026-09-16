@@ -9,7 +9,7 @@ You run the audit with the `membrane` tool that ships with this plugin. Resolve 
 
 The audit finds work on the ads data alone: spend with no orders, campaigns with no impression, budgets set above what a campaign spends, dormant budgets in paused campaigns, brand terms in broad match, one keyword enabled in two ad groups, off-Amazon placements, and every rate with its grade. With unit costs it also prices bids, budget moves, harvests of converting search terms, top-of-search adjustments, and campaign decisions; without them it names each of those rules as skipped. The audit never claims profit or loss. Profit needs unit costs, and the person supplies those in a CSV when they want the money rules to run.
 
-Everything stays on this computer: `~/.membrane/connections/amazon-advertising.json` holds the Amazon credentials, `~/.membrane/audits/<profileId>.sqlite` holds the pulled data, and `~/.membrane/reports/` holds the reports. The only request that leaves the computer without the person's Amazon token is the sign-in through `auth.membrane.agency`, and the refresh of an expired token through the same host.
+Everything stays on this computer: `~/.membrane/connections/amazon-advertising.json` holds the Amazon credentials, `~/.membrane/audits/<profileId>.sqlite` holds the pulled data, and `~/.membrane/reports/` holds the reports. The only requests that leave the computer without the person's Amazon token are the sign-in through `auth.membrane.agency`, the refresh of an expired token through the same host, and a once-a-day version check to the same host that carries nothing.
 
 ## Steps
 

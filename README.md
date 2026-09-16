@@ -51,7 +51,7 @@ Everything the audit reads and writes stays on your computer:
 - `~/.membrane/audits/<profileId>.sqlite` — the campaign, keyword, search-term and placement data the pull fetched.
 - `~/.membrane/reports/` — the HTML reports.
 
-The pull reads your data from Amazon's advertising API directly. Two requests go to Membrane, both to `auth.membrane.agency`: the Amazon sign-in, which goes through Membrane's auth proxy so Amazon's client secret never sits on your machine, and the refresh of an expired Amazon token. The plugin uploads no advertising data, and this version signs in to no Membrane account.
+The pull reads your data from Amazon's advertising API directly. Three requests go to Membrane, all to `auth.membrane.agency`: the Amazon sign-in, which goes through Membrane's auth proxy so Amazon's client secret never sits on your machine, the refresh of an expired Amazon token, and a version check once a day that sends nothing about you or your account and asks one question — whether this plugin is old enough to be worth updating. If it is, the agent says so once and carries on; nothing stops working. Set `MEMBRANE_NO_UPDATE_CHECK=1` to switch that check off. The plugin uploads no advertising data, and this version signs in to no Membrane account.
 
 ## Requirements
 

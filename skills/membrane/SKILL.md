@@ -17,7 +17,7 @@ This plugin audits an Amazon Ads account on the person's own computer. It does f
 
 What stays here: the Amazon access token and refresh token in `~/.membrane/connections/`, the pulled Sponsored Products data in `~/.membrane/audits/`, and the reports in `~/.membrane/reports/`.
 
-What leaves: the Amazon sign-in, which goes through `auth.membrane.agency` so Amazon's client secret never sits on this computer, and the refresh of an expired Amazon token through the same host. Nothing else.
+What leaves: the Amazon sign-in, which goes through `auth.membrane.agency` so Amazon's client secret never sits on this computer, the refresh of an expired Amazon token through the same host, and a version check once a day to the same host that sends nothing about the person or the account. Nothing else.
 
 This version has no Membrane sign-in and no Membrane account. It cannot read Membrane work, and it uploads nothing. If the person asks to see their Membrane inbox, jobs, or receipts from the terminal, say that this version does not do it and point them to https://membrane.agency.
 
