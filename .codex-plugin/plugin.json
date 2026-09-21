@@ -1,6 +1,6 @@
 {
   "name": "membrane",
-  "version": "0.1.13071",
+  "version": "0.1.13077",
   "description": "Audit your Amazon Ads account on your own computer, then hand the work you find to Membrane. Connect Amazon through Membrane's auth proxy; your data stays local.",
   "author": {
     "name": "Membrane",
