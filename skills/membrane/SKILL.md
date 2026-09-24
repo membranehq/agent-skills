@@ -15,15 +15,15 @@ Membrane works inside a grant the brand gives in Seller Central. Under that gran
 
 This plugin audits an Amazon Ads account on the person's own computer. It connects Amazon, pulls the data, and writes two kinds of report from it. The audit says what the ads waste and what they miss; the `amazon-ads` skill has its steps. The Ads Statement says what the ads cost and earned in one period, what changed on the account, and what to ask whoever runs the ads; the `ads-statement` skill has its steps.
 
-What stays here: the Amazon access token and refresh token in `~/.membrane/connections/`, the pulled Sponsored Products data in `~/.membrane/audits/`, and the reports in `~/.membrane/reports/`.
+What stays here: the Amazon access token and refresh token in `~/.membrane/connections/`, the pulled Sponsored Products data in `~/.membrane/amazon-ads/audits/`, and the reports in `~/.membrane/amazon-ads/reports/`.
 
-What leaves: the Amazon sign-in, which goes through `auth.membrane.agency` so Amazon's client secret never sits on this computer, the refresh of an expired Amazon token through the same host, and a version check once a day to the same host that sends nothing about the person or the account. Nothing else.
+What leaves: the Amazon sign-in, which goes through `auth.membrane.agency` so Amazon's client secret never sits on this computer, the refresh of an expired Amazon token through the same host, a version check once a day to the same host that sends nothing about the person or the account, and a read of Membrane's public jobs catalog from the same host when `membrane catalog` runs, which sends nothing either. Nothing else.
 
 This version has no Membrane sign-in and no Membrane account. It cannot read Membrane work, and it uploads nothing. If the person asks to see their Membrane inbox, jobs, or receipts from the terminal, say that this version does not do it and point them to https://membrane.agency.
 
 ## Handing the work over
 
-`membrane ads report --profile <profileId>` prints two things that matter for the hand-over:
+`amazon-ads report --profile <profileId>` prints two things that matter for the hand-over:
 
 - `offerUrl` — the link that opens Membrane's Amazon Ads job. Give the person the link.
 - `findingsPath` — the file on this computer holding every finding the audit produced.
@@ -32,11 +32,11 @@ Tell the person to share the findings file with Membrane when they start the job
 
 State what the audit found and what it costs them today, in their own numbers. Never promise a result, a percentage, or a date that Membrane has not stated.
 
-## When the `membrane` tool is not there
+## When the plugin's scripts are not there
 
-The skills travel further than the engine. A web-only session — ChatGPT in the browser — gets these instructions and no `membrane` command. When the tool is missing, say so plainly and tell the person how to get it:
+The skills travel further than the scripts. A web-only session — ChatGPT in the browser — gets these instructions and no `membrane` or `amazon-ads` command. When the scripts are missing, say so plainly and tell the person how to get them:
 
 - **Codex CLI:** `codex plugin marketplace add membranehq/agent-skills`, then `codex plugin add membrane@membrane`.
 - **Claude Code:** `/plugin marketplace add membranehq/agent-skills`, then `/plugin install membrane@membrane`.
 
-The audit reads the person's own Amazon account and writes files on their own computer, so it runs where their files are. Do not try to work around a missing engine.
+The audit reads the person's own Amazon account and writes files on their own computer, so it runs where their files are. Do not try to work around a missing script.

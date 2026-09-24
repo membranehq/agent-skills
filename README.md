@@ -24,18 +24,18 @@ codex plugin add membrane@membrane
 
 ## Run the audit
 
-Ask your agent to audit your Amazon ads and it follows the steps. These are the commands behind them:
+Ask your agent to audit your Amazon ads and it follows the steps. These are the commands behind them. The plugin ships two scripts: `membrane` signs you in to Amazon, and `amazon-ads` runs the audit.
 
 - `membrane connect amazon-advertising` — opens Amazon's consent page, then stores the token on your computer.
-- `membrane ads profiles` — lists the advertising profiles on the account.
-- `membrane ads pull --profile <id>` — mirrors the account structure and starts five Sponsored Products reports over 60 days.
-- `membrane ads status --profile <id>` — says which of those reports Amazon has finished.
-- `membrane ads audit --profile <id>` — runs the rules over the pulled data.
-- `membrane ads report --profile <id>` — writes an HTML report and prints its path.
+- `amazon-ads profiles` — lists the advertising profiles on the account.
+- `amazon-ads pull --profile <id>` — mirrors the account structure and starts five Sponsored Products reports over 60 days.
+- `amazon-ads status --profile <id>` — says which of those reports Amazon has finished.
+- `amazon-ads audit --profile <id>` — runs the rules over the pulled data.
+- `amazon-ads report --profile <id>` — writes an HTML report and prints its path.
 
-Amazon can take 20 minutes or more to produce a report, so the pull returns at once and `membrane ads status` tells you when the data is in.
+Amazon can take 20 minutes or more to produce a report, so the pull returns at once and `amazon-ads status` tells you when the data is in.
 
-`membrane ads audit --demo` runs the whole audit on sample data with no Amazon connection, so you can read the output before you connect anything.
+`amazon-ads audit --demo` runs the whole audit on sample data with no Amazon connection, so you can read the output before you connect anything.
 
 ## What the audit finds
 
@@ -48,10 +48,10 @@ Some rules need to know what a unit earns you. Pass a CSV with the columns `asin
 Everything the audit reads and writes stays on your computer:
 
 - `~/.membrane/connections/amazon-advertising.json` — your Amazon access token and refresh token, readable only by you.
-- `~/.membrane/audits/<profileId>.sqlite` — the campaign, keyword, search-term and placement data the pull fetched.
-- `~/.membrane/reports/` — the HTML reports.
+- `~/.membrane/amazon-ads/audits/<profileId>.sqlite` — the campaign, keyword, search-term and placement data the pull fetched.
+- `~/.membrane/amazon-ads/reports/` — the HTML reports.
 
-The pull reads your data from Amazon's advertising API directly. Three requests go to Membrane, all to `auth.membrane.agency`: the Amazon sign-in, which goes through Membrane's auth proxy so Amazon's client secret never sits on your machine, the refresh of an expired Amazon token, and a version check once a day that sends nothing about you or your account and asks one question — whether this plugin is old enough to be worth updating. If it is, the agent says so once and carries on; nothing stops working. Set `MEMBRANE_NO_UPDATE_CHECK=1` to switch that check off. The plugin uploads no advertising data, and this version signs in to no Membrane account.
+The pull reads your data from Amazon's advertising API directly. Three requests go to Membrane, all to `auth.membrane.agency`: the Amazon sign-in, which goes through Membrane's auth proxy so Amazon's client secret never sits on your machine, the refresh of an expired Amazon token, and a version check once a day that sends nothing about you or your account and asks one question — whether this plugin is old enough to be worth updating. If it is, the agent says so once and carries on; nothing stops working. Set `MEMBRANE_NO_UPDATE_CHECK=1` to switch that check off. A fourth goes there only when you ask your agent what Membrane offers: `membrane catalog` reads Membrane's public list of jobs and sends nothing. The plugin uploads no advertising data, and this version signs in to no Membrane account.
 
 ## Requirements
 
@@ -59,7 +59,7 @@ Node 22.13 or newer. The audit database uses the SQLite built into Node, so ther
 
 ## Hand the work over
 
-When the audit finds work worth doing, `membrane ads report` prints a link to Membrane's Amazon Ads job and the path of the findings file to share. Membrane works under a grant you give in Seller Central and end whenever you want, and a named operator is accountable for the result. The service and its prices are at https://membrane.agency/amazon.
+When the audit finds work worth doing, `amazon-ads report` prints a link to Membrane's Amazon Ads job and the path of the findings file to share. Membrane works under a grant you give in Seller Central and end whenever you want, and a named operator is accountable for the result. The service and its prices are at https://membrane.agency/amazon.
 
 ## License
 
