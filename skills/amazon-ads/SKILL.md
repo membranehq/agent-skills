@@ -27,5 +27,6 @@ Everything stays on this computer: `~/.membrane/connections/amazon-advertising.j
 - Every number carries its window and its population, for example "14 of 61 campaigns, Jul 16 to Sep 13".
 - A missing value is not zero. When a report has no row for a target, say the data is missing.
 - Do not run `membrane ads pull` twice for the same profile while a pull is running. Read `membrane ads status` first.
+- The audit does not read Amazon's change history. The pull and the status also read it, a page at a time, for the Ads Statement; the audit needs no `membrane ads history`.
 - `membrane ads audit --demo` runs on bundled sample data with no Amazon connection. Use it only when the person asks to see what the audit looks like before connecting.
 - Show the person every command you are about to run that changes their Amazon account. The audit changes nothing on Amazon; only Membrane's job does, and only after the person buys it.
