@@ -15,7 +15,7 @@ Membrane works inside a grant the brand gives in Seller Central. Under that gran
 
 ## What this plugin does, and does not do
 
-This plugin audits an Amazon Ads account on the person's own computer. It connects Amazon, pulls the data, and writes two kinds of report from it. The audit says what the ads waste and what they miss; the `amazon-ads` skill has its steps. The Ads Statement says what the ads cost and earned in one period, what changed on the account, and what to ask whoever runs the ads; the `ads-statement` skill has its steps.
+This plugin audits an Amazon Ads account on the person's own computer. It connects Amazon, pulls the data, and writes two kinds of report from it. The audit says what the ads waste and what they miss. The Ads Statement says what the ads cost and earned in one period, what changed on the account, and what to ask whoever runs the ads. The `amazon-ads` skill has the steps of both.
 
 What stays here: the Amazon access token and refresh token in `~/.membrane/connections/`, the pulled Sponsored Products data in `~/.membrane/amazon-ads/audits/`, and the reports in `~/.membrane/amazon-ads/reports/`.
 

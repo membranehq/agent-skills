@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "membrane",
   "displayName": "Membrane",
-  "version": "0.1.13214",
+  "version": "0.1.13216",
   "description": "Free Amazon tools that run inside your own AI agent, on your own computer, with no Membrane account. Each tool finds work worth doing in your account and hands it to Membrane when you want it done for you.",
   "author": {
     "name": "Membrane",
