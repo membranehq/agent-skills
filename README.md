@@ -1,6 +1,6 @@
-# Membrane for Amazon Ads
+# Membrane tools for Amazon sellers
 
-Audit your Amazon Ads account on your own computer. The plugin connects your advertising account, pulls the last 60 days of Sponsored Products data into a local database, and tells you what the ads are wasting and what they are missing. It runs in Claude Code, Codex CLI, and the ChatGPT desktop app.
+Free Amazon tools for your AI agent. They run on your computer, keep your data there, and need no Membrane account. The first one audits your Amazon Ads; when a tool finds work, Membrane can do it for you.
 
 Membrane runs Amazon accounts for brands. The audit is where a brand starts: it runs on your machine, it needs no Membrane account, and it shows you the work before you decide who does it.
 
@@ -21,6 +21,8 @@ Codex CLI:
 codex plugin marketplace add membranehq/agent-skills
 codex plugin add membrane@membrane
 ```
+
+In Codex or the ChatGPT desktop app, open Settings → Hooks once after installing and turn on the `membrane` hook. Without it the tools still work, but your agent starts without the short guide to them.
 
 ## Run the audit
 

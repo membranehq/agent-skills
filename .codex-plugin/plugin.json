@@ -1,12 +1,12 @@
 {
   "name": "membrane",
-  "version": "0.1.13211",
-  "description": "Audit your Amazon Ads account on your own computer, then hand the work you find to Membrane. Connect Amazon through Membrane's auth proxy; your data stays local.",
+  "version": "0.1.13214",
+  "description": "Free Amazon tools that run inside your own AI agent, on your own computer, with no Membrane account. Each tool finds work worth doing in your account and hands it to Membrane when you want it done for you.",
   "author": {
     "name": "Membrane",
     "url": "https://membrane.agency"
   },
-  "homepage": "https://membrane.agency/amazon",
+  "homepage": "https://membrane.agency/agent-skills",
   "repository": "https://github.com/membranehq/agent-skills",
   "license": "MIT",
   "keywords": [
@@ -19,8 +19,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Membrane",
-    "shortDescription": "Audit your Amazon Ads, then hand the work to Membrane",
-    "longDescription": "Membrane runs Amazon accounts for brands. This plugin lets you start on your own computer: connect your Amazon Ads account through Membrane's auth proxy, pull 60 days of campaign data into a local database, and get an audit of wasted spend, budget limits, unharvested search terms, and structure problems. Nothing leaves your computer except the sign-in. When the audit finds work, the report links to Membrane's Amazon Ads job and names the findings file to share, so you can hand the work over on membrane.agency.",
+    "shortDescription": "Free Amazon tools that run in your own agent",
+    "longDescription": "Membrane runs Amazon accounts for brands. This plugin gives you some of the same tools for free, inside Claude Code, Codex, or the ChatGPT desktop app. The first tool works on Amazon Ads. It audits 60 days of Sponsored Products data for spend with no orders, budgets that sit unused, duplicate targets, and brand terms in broad match; add your unit costs and it also prices bids, budget raises, and search terms worth a keyword of their own. It also writes a monthly statement of what your ads cost, earned, and changed. You connect Amazon through Membrane's sign-in page; the tokens and the data stay on your computer. When a tool finds work, it links to the Membrane job that does it.",
     "developerName": "Membrane",
     "category": "Productivity",
     "capabilities": [
@@ -30,7 +30,7 @@
     "websiteURL": "https://membrane.agency",
     "defaultPrompt": [
       "Audit my Amazon Ads account",
-      "What is wasting money in my Amazon ads?"
+      "What did my Amazon ads cost and earn last month?"
     ]
   }
 }

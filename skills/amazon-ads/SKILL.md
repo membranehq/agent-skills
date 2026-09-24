@@ -1,6 +1,8 @@
 ---
 name: amazon-ads
 description: Audit an Amazon Ads account on this computer with the `amazon-ads` tool — connect Amazon through Membrane's auth proxy, pull 60 days of Sponsored Products data into a local SQLite file, run the audit, read the findings, and hand the work to Membrane. Use when the person asks to audit, review, or check their Amazon advertising, or asks what is wrong with their ads.
+metadata:
+  summary: 'Audits 60 days of your Sponsored Products ads for spend with no orders, unused budgets, and duplicate or loose targeting, and states what the ads cost, earned, and changed in a month.'
 ---
 
 # Amazon Ads audit

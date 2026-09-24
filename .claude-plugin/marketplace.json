@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "membrane",
-  "description": "Membrane's plugin for Claude Code: audit your Amazon Ads account on your own computer.",
+  "description": "Membrane's free Amazon tools for Claude Code and Codex.",
   "owner": {
     "name": "Membrane",
     "url": "https://membrane.agency"
@@ -14,7 +14,7 @@
         "url": "https://github.com/membranehq/agent-skills.git",
         "ref": "main"
       },
-      "description": "Audit your Amazon Ads account on your own computer, then hand the work you find to Membrane (membrane.agency). Connect Amazon through Membrane's auth proxy; your data stays local.",
+      "description": "Free Amazon tools that run inside your own AI agent, on your own computer, with no Membrane account. Each tool finds work worth doing in your account and hands it to Membrane when you want it done for you.",
       "category": "productivity"
     }
   ]

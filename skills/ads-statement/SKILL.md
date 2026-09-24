@@ -1,6 +1,8 @@
 ---
 name: ads-statement
 description: Build the Ads Statement of an Amazon Ads account on this computer with the `amazon-ads` tool — what the ads cost and earned in a period, what changed on the account, and which questions to put to whoever runs the ads. Use when the person asks what their ads agency or ads manager did last month, whether the ads paid off, what changed in the account, or what to ask the agency.
+metadata:
+  summary: 'Builds the Ads Statement of one period: what your ads cost and earned, what changed on the account, and what to ask your agency.'
 ---
 
 # Ads Statement

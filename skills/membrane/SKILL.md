@@ -1,6 +1,8 @@
 ---
 name: membrane
 description: What Membrane is, what this plugin does and does not do, and how to hand the work the audit found to Membrane. Use when the person asks who Membrane is, what Membrane would do for their Amazon account, how the sign-in works, what leaves their computer, or what to do with the findings the audit produced.
+metadata:
+  summary: 'What Membrane is, what its jobs cost, and how to hand over the work a tool found.'
 ---
 
 # Membrane
