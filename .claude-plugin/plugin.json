@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "membrane",
   "displayName": "Membrane",
-  "version": "0.1.13218",
-  "description": "Free Amazon tools that run inside your own AI agent, on your own computer, with no Membrane account. Each tool finds work worth doing in your account and hands it to Membrane when you want it done for you.",
+  "version": "0.1.13219",
+  "description": "Free skills for e-commerce back-office work. Your own AI agent runs them on your computer, with no sign-up, and your data stays there. The first skill works on Amazon Ads.",
   "author": {
     "name": "Membrane",
     "url": "https://membrane.agency"

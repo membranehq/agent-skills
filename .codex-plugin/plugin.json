@@ -1,7 +1,7 @@
 {
   "name": "membrane",
-  "version": "0.1.13218",
-  "description": "Free Amazon tools that run inside your own AI agent, on your own computer, with no Membrane account. Each tool finds work worth doing in your account and hands it to Membrane when you want it done for you.",
+  "version": "0.1.13219",
+  "description": "Free skills for e-commerce back-office work. Your own AI agent runs them on your computer, with no sign-up, and your data stays there. The first skill works on Amazon Ads.",
   "author": {
     "name": "Membrane",
     "url": "https://membrane.agency"
@@ -19,8 +19,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Membrane",
-    "shortDescription": "Free Amazon tools that run in your own agent",
-    "longDescription": "Membrane runs Amazon accounts for brands. This plugin gives you some of the same tools for free, inside Claude Code, Codex, or the ChatGPT desktop app. The first tool works on Amazon Ads. It audits 60 days of Sponsored Products data for spend with no orders, budgets that sit unused, duplicate targets, and brand terms in broad match; add your unit costs and it also prices bids, budget raises, and search terms worth a keyword of their own. It also writes a monthly statement of what your ads cost, earned, and changed. You connect Amazon through Membrane's sign-in page; the tokens and the data stay on your computer. When a tool finds work, it links to the Membrane job that does it.",
+    "shortDescription": "Free e-commerce back-office skills for your agent",
+    "longDescription": "Membrane runs the back office for e-commerce brands. This plugin gives you some of the same skills for free, inside Claude Code, Codex, or the ChatGPT desktop app. They run on your computer, need no sign-up, and keep your data there. The first skill works on Amazon Ads. It audits 60 days of Sponsored Products data for spend with no orders, budgets that sit unused, duplicate targets, and brand terms in broad match; add your unit costs and it also prices bids, budget raises, and search terms worth a keyword of their own. It also writes a monthly statement of what your ads cost, earned, and changed. You connect Amazon through Membrane's sign-in page; the tokens and the data stay on your computer.",
     "developerName": "Membrane",
     "category": "Productivity",
     "capabilities": [

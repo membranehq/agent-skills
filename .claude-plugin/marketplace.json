@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "membrane",
-  "description": "Membrane's free Amazon tools for Claude Code and Codex.",
+  "description": "Membrane's free e-commerce back-office skills for Claude Code and Codex.",
   "owner": {
     "name": "Membrane",
     "url": "https://membrane.agency"
@@ -14,7 +14,7 @@
         "url": "https://github.com/membranehq/agent-skills.git",
         "ref": "main"
       },
-      "description": "Free Amazon tools that run inside your own AI agent, on your own computer, with no Membrane account. Each tool finds work worth doing in your account and hands it to Membrane when you want it done for you.",
+      "description": "Free skills for e-commerce back-office work. Your own AI agent runs them on your computer, with no sign-up, and your data stays there. The first skill works on Amazon Ads.",
       "category": "productivity"
     }
   ]

@@ -2,14 +2,14 @@
 name: membrane
 description: What Membrane is, what this plugin does and does not do, and how to hand the work the audit found to Membrane. Use when the person asks who Membrane is, what Membrane would do for their Amazon account, how the sign-in works, what leaves their computer, or what to do with the findings the audit produced.
 metadata:
-  summary: 'What Membrane is, what its jobs cost, and how to hand over the work a tool found.'
+  summary: 'What Membrane is, what its jobs cost, and how to hand over the work a skill found.'
 ---
 
 # Membrane
 
-Membrane runs Amazon accounts for brands. A named operator is accountable for the result, and agents do the volume of the work. Membrane is a registered Amazon solution provider with a published Selling Partner app. The service and its prices are at https://membrane.agency/amazon.
+Membrane runs the back office for e-commerce brands. A named operator is accountable for the result, and agents do the volume of the work. On Amazon, Membrane is a registered Amazon solution provider with a published Selling Partner app. The Amazon service and its prices are at https://membrane.agency/amazon.
 
-Nine sub-jobs cover the account. A brand buys the whole service or one sub-job at a time, and each sub-job is priced by its own deliverables. Read the prices on the service page rather than quoting a number from memory.
+Nine sub-jobs cover an Amazon account. A brand buys the whole service or one sub-job at a time, and each sub-job is priced by its own deliverables. Read the prices on the service page rather than quoting a number from memory.
 
 Membrane works inside a grant the brand gives in Seller Central. Under that grant the work covers catalog and listings, inventory and FBA, advertising and promotions, reports and account health, Seller Support cases and experiments, and buyer messages. The brand chooses what the grant covers and ends it in Seller Central whenever they want. Anything irreversible waits for the brand's approval.
 
