@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "membrane",
   "displayName": "Membrane",
-  "version": "0.1.13250",
-  "description": "Free skills for e-commerce back-office work. Your own AI agent runs them on your computer, with no sign-up, and your data stays there. The first skill works on Amazon Ads.",
+  "version": "0.1.13270",
+  "description": "Free skills for e-commerce back-office work. Your own AI agent runs them on your computer, with no sign-up, and your data stays there.",
   "author": {
     "name": "Membrane",
     "url": "https://membrane.agency"

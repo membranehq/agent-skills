@@ -1,6 +1,6 @@
 # E-commerce back-office skills for your AI agent
 
-Free skills for the back-office work of an e-commerce brand, from Membrane. Your agent runs them on your computer, with no sign-up, and your data stays there. The first skill works on Amazon Ads.
+Free skills for the back-office work of an e-commerce brand, from Membrane. Your agent runs them on your computer, with no sign-up, and your data stays there.
 
 <table>
 <tr>
@@ -64,6 +64,14 @@ claude plugin install membrane@membrane
 | Skill | What it does |
 | --- | --- |
 | [Amazon Ads](https://membrane.agency/agent-skills/amazon-ads) | Audits 60 days of your Sponsored Products ads for spend with no orders, unused budgets, and duplicate or loose targeting, and states what the ads cost, earned, and changed in a month. |
+
+## Coming soon
+
+| Skill | What it will do |
+| --- | --- |
+| [Amazon Reimbursements](https://membrane.agency/agent-skills/amazon-reimbursements) | Reads your Seller Central reports for units Amazon lost, damaged, or never got back after a refund, and lists the reimbursement claims worth filing, with the case text for each. |
+| Amazon Catalog Optimization | Reviews your Amazon catalog and tells you what to change in each listing to get more sales. |
+| Stockout Prevention | Analyzes your inventory, builds a model of how each product sells, and tells you what to reorder and when. |
 
 ## Requirements
 

@@ -14,7 +14,7 @@
         "url": "https://github.com/membranehq/agent-skills.git",
         "ref": "main"
       },
-      "description": "Free skills for e-commerce back-office work. Your own AI agent runs them on your computer, with no sign-up, and your data stays there. The first skill works on Amazon Ads.",
+      "description": "Free skills for e-commerce back-office work. Your own AI agent runs them on your computer, with no sign-up, and your data stays there.",
       "category": "productivity"
     }
   ]
