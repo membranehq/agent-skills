@@ -61,38 +61,13 @@ claude plugin install membrane@membrane
 
 ## Skills
 
-### Amazon Ads
-
-Audits 60 days of your Sponsored Products ads for spend with no orders, unused budgets, and duplicate or loose targeting, and states what the ads cost, earned, and changed in a month. More on the skill: https://membrane.agency/agent-skills/amazon-ads
-
-**Run the audit.** Ask your agent to audit your Amazon ads and it follows the steps. These are the commands behind them. The plugin ships two scripts: `membrane` signs you in to Amazon, and `amazon-ads` runs the audit.
-
-- `membrane connect amazon-advertising` — opens Amazon's consent page, then stores the token on your computer.
-- `amazon-ads profiles` — lists the advertising profiles on the account.
-- `amazon-ads pull --profile <id>` — mirrors the account structure and starts five Sponsored Products reports over 60 days.
-- `amazon-ads status --profile <id>` — says which of those reports Amazon has finished.
-- `amazon-ads audit --profile <id>` — runs the rules over the pulled data.
-- `amazon-ads report --profile <id>` — writes an HTML report and prints its path.
-
-Amazon can take 20 minutes or more to produce a report, so the pull returns at once and `amazon-ads status` tells you when the data is in.
-
-`amazon-ads audit --demo` runs the whole audit on sample data with no Amazon connection, so you can read the output before you connect anything.
-
-**What the audit finds.** On the ads data alone: spend with no orders, campaigns with no impression, budgets set above what a campaign spends, dormant budgets in paused campaigns, brand terms in broad match, one keyword enabled in two ad groups, two ad groups on one product and target, off-Amazon placements, and every rate with its grade.
-
-Some rules need to know what a unit earns you. Pass a CSV with the columns `asin,contributionPerUnit,source,windowStart,windowEnd` to `--unit-costs`, and the audit also prices bids, budget moves, harvests of converting search terms, top-of-search adjustments, and campaign decisions. Without that file it names each of those rules as skipped. It never guesses a unit cost, and it never states a profit it cannot compute.
-
-**Where its data lives.**
-
-- `~/.membrane/connections/amazon-advertising.json` — your Amazon access token and refresh token, readable only by you.
-- `~/.membrane/amazon-ads/audits/<profileId>.sqlite` — the campaign, keyword, search-term and placement data the pull fetched.
-- `~/.membrane/amazon-ads/reports/` — the HTML reports.
-
-**Hand the work over.** When the audit finds work worth doing, `amazon-ads report` prints a link to Membrane's Amazon Ads job and the path of the findings file to share. Membrane works under a grant you give in Seller Central and end whenever you want, and a named operator is accountable for the result. The service and its prices are at https://membrane.agency/amazon.
+| Skill | What it does |
+| --- | --- |
+| [Amazon Ads](https://membrane.agency/agent-skills/amazon-ads) | Audits 60 days of your Sponsored Products ads for spend with no orders, unused budgets, and duplicate or loose targeting, and states what the ads cost, earned, and changed in a month. |
 
 ## Requirements
 
-Node 22.13 or newer. The skills store their data in the SQLite built into Node, so there is nothing to compile and nothing else to install.
+macOS or Linux, on an x64 or arm64 processor. There's nothing to install. If your computer has Node 22.13 or newer, the plugin runs on it. If it doesn't, the plugin downloads a program that carries its own runtime, and on Linux that program needs glibc. Windows isn't supported yet.
 
 ## FAQ
 
@@ -100,6 +75,13 @@ Node 22.13 or newer. The skills store their data in the SQLite built into Node, 
 <summary>What does the plugin send to Membrane?</summary>
 
 Four kinds of request, all to `auth.membrane.agency`: the sign-in, the refresh of an expired token, one version check a day, and a read of Membrane's public list of jobs when you ask what Membrane offers. The version check sends the plugin version and nothing else, and asks whether this plugin is old enough to be worth updating. If it is, the agent says so once and carries on.
+
+</details>
+
+<details>
+<summary>What does the plugin download?</summary>
+
+Nothing, if your computer has Node 22.13 or newer: the plugin's code is in this repository and runs on your Node. Without it, the first command downloads the program for your computer from this repository's GitHub releases: 26 MB on an Apple silicon Mac, 37 MB on Linux. The script checks the download against the SHA-256 written in it and deletes it without running it if the two differ. The program is kept in `~/.membrane/bin/`, under its checksum. A plugin update downloads it again only when the program itself changed. Each download deletes the other copies more than a week old. Set `MEMBRANE_NO_NODE=1` to use the downloaded program even when you have Node.
 
 </details>
 
