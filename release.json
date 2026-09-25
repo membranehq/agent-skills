@@ -1,8 +1,8 @@
 {
-  "version": "0.1.13232",
-  "commit": "53e0954a5427ca8eb6f3ac0d067dc4f041be1572",
-  "builtAt": "2026-09-25T01:15:46.304Z",
-  "downloadUrl": "https://github.com/membranehq/agent-skills/releases/download/v0.1.13232",
+  "version": "0.1.13242",
+  "commit": "54e7d5303b163bc8442ccbaf9c7680a00d60f035",
+  "builtAt": "2026-09-25T14:22:10.157Z",
+  "downloadUrl": "https://github.com/membranehq/agent-skills/releases/download/v0.1.13242",
   "executables": {
     "darwin-arm64": {
       "sha256": "a0ef49d117ac38d691f4e7265556e81ae23c88070f52e657fd636074bcb63e14",
