@@ -89,7 +89,7 @@ Four kinds of request, all to `auth.membrane.agency`: the sign-in, the refresh o
 <details>
 <summary>What does the plugin download?</summary>
 
-Nothing, if your computer has Node 22.13 or newer: the plugin's code is in this repository and runs on your Node. Without it, the first command downloads the program for your computer from this repository's GitHub releases: 26 MB on an Apple silicon Mac, 37 MB on Linux. The script checks the download against the SHA-256 written in it and deletes it without running it if the two differ. The program is kept in `~/.membrane/bin/`, under its checksum. A plugin update downloads it again only when the program itself changed. Each download deletes the other copies more than a week old. Set `MEMBRANE_NO_NODE=1` to use the downloaded program even when you have Node.
+Nothing, if your computer has Node 22.13 or newer: the plugin's code is in its repository, `membranehq/agent-skills`, and runs on your Node. Without it, the first command downloads the program for your computer from that repository's GitHub releases: 26 MB on an Apple silicon Mac, 37 MB on Linux. The script checks the download against the SHA-256 written in it and deletes it without running it if the two differ. The program is kept in `~/.membrane/bin/`, under its checksum. A plugin update downloads it again only when the program itself changed. Each download deletes the other copies more than a week old. Set `MEMBRANE_NO_NODE=1` to use the downloaded program even when you have Node.
 
 </details>
 
