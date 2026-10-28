@@ -1,6 +1,6 @@
-# E-commerce back-office skills for your AI agent
+# Membrane for your AI agent
 
-Free skills for the back-office work of an e-commerce brand, from Membrane. Your agent runs them on your computer, with no sign-up, and your data stays there.
+Membrane's plugin for Claude Code and Codex. It brings your Membrane workspaces into your agent, connects your apps on your computer, and shows Membrane's jobs catalog. Installing it needs no sign-up, and your app tokens stay on your computer.
 
 <table>
 <tr>
@@ -31,7 +31,7 @@ codex plugin marketplace add membranehq/agent-skills
 codex plugin add membrane@membrane
 ```
 
-In Codex or the ChatGPT desktop app, open Settings → Hooks once after installing and turn on the `membrane` hook. Without it the skills still work, but your agent starts without the short guide to them.
+In Codex or the ChatGPT desktop app, open Settings → Hooks once after installing and turn on the `membrane` hook. Without it the plugin still works, but your agent starts without the short guide to it.
 
 </td>
 </tr>
@@ -55,23 +55,15 @@ claude plugin install membrane@membrane
 
 ## Free and without sign-up
 
-- **Free.** Every skill here is free to use, under the MIT license.
-- **No sign-up.** You make no Membrane account and give no email. You sign in only to the app a skill works on, such as Amazon Ads. That sign-in goes through Membrane's sign-in page, so the app's client secret never sits on your machine.
-- **Your data stays on your computer.** The skills read your data from the app's API directly and store the tokens and the data under `~/.membrane/`. They upload nothing.
+- **Free.** The plugin is free to use, under the MIT license.
+- **No sign-up to install.** Installing needs no Membrane account and no email. The Membrane server asks you to sign in the first time your agent uses it, and it opens only the workspaces you pick. When you connect an app on your computer, you sign in to that app through Membrane's sign-in page, so the app's client secret never sits on your machine.
+- **Your tokens stay on your computer.** The plugin keeps each app's tokens under `~/.membrane/`, and its scripts upload nothing. Membrane receives only what your agent does in the workspaces you picked.
 
 ## Skills
 
 | Skill | What it does |
 | --- | --- |
-| [Amazon Ads](https://membrane.agency/agent-skills/amazon-ads) | Audits 60 days of your Sponsored Products ads for spend with no orders, unused budgets, and duplicate or loose targeting, and states what the ads cost, earned, and changed in a month. |
-
-## Coming soon
-
-| Skill | What it will do |
-| --- | --- |
-| [Amazon Reimbursements](https://membrane.agency/agent-skills/amazon-reimbursements) | Reads your Seller Central reports for units Amazon lost, damaged, or never got back after a refund, and lists the reimbursement claims worth filing, with the case text for each. |
-| Amazon Catalog Optimization | Reviews your Amazon catalog and tells you what to change in each listing to get more sales. |
-| Stockout Prevention | Analyzes your inventory, builds a model of how each product sells, and tells you what to reorder and when. |
+| Membrane | What Membrane is, what its jobs cost, and how to hand work over to Membrane. |
 
 ## Requirements
 
@@ -82,7 +74,14 @@ macOS or Linux, on an x64 or arm64 processor. There's nothing to install. If you
 <details>
 <summary>What does the plugin send to Membrane?</summary>
 
-Four kinds of request, all to `auth.membrane.agency`: the sign-in, the refresh of an expired token, one version check a day, and a read of Membrane's public list of jobs when you ask what Membrane offers. The version check sends the plugin version and nothing else, and asks whether this plugin is old enough to be worth updating. If it is, the agent says so once and carries on.
+The Membrane server, at `api.membrane.agency/mcp`, receives what your agent does in the workspaces you picked, such as a request it answers and a file it attaches to an answer. The plugin's scripts make four kinds of request, all to `auth.membrane.agency`: the sign-in to an app, the refresh of an expired token, one version check a day, and a read of Membrane's public list of jobs when you ask what Membrane offers. The version check sends the plugin version and nothing else, and asks whether this plugin is old enough to be worth updating. If it is, the agent says so once and carries on.
+
+</details>
+
+<details>
+<summary>How do I sign in to the Membrane server?</summary>
+
+Start a new session after you install the plugin. The first time your agent uses the Membrane server, it asks you to sign in to Membrane and to pick the workspaces it may open. In Claude Code, run `/mcp`, pick the Membrane server, and sign in there. In Codex, run `codex mcp login membrane` in a terminal. You can change the workspaces or disconnect the agent at any time in your Membrane account, under AI agents.
 
 </details>
 
@@ -102,9 +101,7 @@ Membrane counts how many installs make the version check each day and keeps no a
 
 ## About Membrane
 
-Membrane runs the back office for e-commerce brands. AI agents do the around-the-clock work on the tools a brand already uses, and a named expert makes the calls and answers for the result. The jobs and their prices are at https://membrane.agency/jobs.
-
-This repository holds the built plugin. Membrane builds it from source and replaces this tree on every release.
+There is a right way to run your operations. Membrane finds it and runs it. AI agents do the around-the-clock work on the tools a company already uses, and a named operator makes the calls and answers for the result. The jobs and their prices are at https://membrane.agency/jobs.
 
 ## License
 

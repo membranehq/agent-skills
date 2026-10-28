@@ -1,26 +1,25 @@
 {
   "name": "membrane",
-  "version": "0.1.13302",
-  "description": "Free skills for e-commerce back-office work. Your own AI agent runs them on your computer, with no sign-up, and your data stays there.",
+  "version": "0.1.14617",
+  "description": "Membrane's plugin for Claude Code and Codex. It brings your Membrane workspaces into your agent, connects your apps on your computer, and shows Membrane's jobs catalog. Installing it needs no sign-up, and your app tokens stay on your computer.",
   "author": {
     "name": "Membrane",
     "url": "https://membrane.agency"
   },
-  "homepage": "https://membrane.agency/agent-skills",
+  "homepage": "https://membrane.agency",
   "repository": "https://github.com/membranehq/agent-skills",
   "license": "MIT",
   "keywords": [
     "membrane",
     "amazon",
-    "amazon-ads",
-    "audit",
     "ecommerce"
   ],
   "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Membrane",
-    "shortDescription": "Free e-commerce back-office skills for your agent",
-    "longDescription": "Membrane runs the back office for e-commerce brands. This plugin gives you some of the same skills for free, inside Claude Code, Codex, or the ChatGPT desktop app. Each skill reads your data in one of the apps you sell or advertise through and tells you what to fix. The skills run on your computer and need no sign-up. You connect each app through Membrane's sign-in page, and the tokens and the data stay on your computer.",
+    "shortDescription": "Your Membrane workspaces in your agent",
+    "longDescription": "There is a right way to run your operations. Membrane finds it and runs it. This plugin brings Membrane into Claude Code, Codex, or the ChatGPT desktop app. It adds the Membrane server: you sign in once and pick the workspaces your agent may open, and there it answers your requests, reads your knowledge and data tables, and uses your connections. It connects your apps on your computer through Membrane's sign-in page, so each app's client secret stays on Membrane's server and the tokens stay on your computer. It shows Membrane's jobs catalog, and its `membrane` skill tells your agent who Membrane is, what a job costs, and how to hand work over. Installing it needs no Membrane account.",
     "developerName": "Membrane",
     "category": "Productivity",
     "capabilities": [
@@ -29,8 +28,8 @@
     ],
     "websiteURL": "https://membrane.agency",
     "defaultPrompt": [
-      "Audit my Amazon Ads account",
-      "What did my Amazon ads cost and earn last month?"
+      "Who is Membrane?",
+      "What jobs does Membrane offer, and what do they cost?"
     ]
   }
 }

@@ -9,7 +9,7 @@
       "source": {
         "source": "url",
         "url": "https://github.com/membranehq/agent-skills.git",
-        "ref": "main"
+        "ref": "plugin"
       },
       "policy": {
         "installation": "AVAILABLE",

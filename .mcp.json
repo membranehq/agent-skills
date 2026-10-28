@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "membrane": {
+      "type": "http",
+      "url": "https://api.membrane.agency/mcp"
+    }
+  }
+}
