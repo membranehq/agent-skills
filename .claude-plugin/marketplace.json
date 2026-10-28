@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "membrane",
+  "description": "Membrane's plugin for Claude Code and Codex.",
+  "owner": {
+    "name": "Membrane",
+    "url": "https://membrane.agency"
+  },
+  "plugins": [
+    {
+      "name": "membrane",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/membranehq/agent-skills.git",
+        "ref": "plugin"
+      },
+      "description": "Membrane's plugin for Claude Code and Codex. It brings your Membrane workspaces into your agent, connects your apps on your computer, and shows Membrane's jobs catalog. Installing it needs no sign-up, and your app tokens stay on your computer.",
+      "category": "productivity"
+    }
+  ]
+}
