@@ -64,6 +64,7 @@ claude plugin install membrane@membrane
 | Skill | What it does |
 | --- | --- |
 | Membrane | What Membrane is, what its jobs cost, and how to hand work over to Membrane. |
+| Handoff | Work in the Membrane tab you hand over: your agent joins it, and you watch each step live. |
 
 ## Requirements
 

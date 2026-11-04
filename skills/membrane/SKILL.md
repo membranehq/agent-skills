@@ -35,6 +35,10 @@ The plugin also adds the Membrane MCP server, at `https://api.membrane.agency/mc
 
 When the server's tools are missing, the person has not signed in yet. In Claude Code, ask them to run `/mcp`, pick the Membrane server, and sign in. In Codex, ask them to run `codex mcp login membrane` in a terminal. A person with no Membrane account gets one when they start a job. The server shows no inbox, jobs, or receipts; for those, point the person to https://membrane.agency.
 
+### Filling a request
+
+When you fill one of the person's requests (an intake), answer only from a real source. Say which questions you skipped and why. Submit with `done: true` only after the person agrees.
+
 ## Handing the work over
 
 When the person wants Membrane to do a job, give them the job's page from `membrane catalog`. They start the job there, and they get a Membrane account when they start it. After that, the Membrane server reaches their workspace.
