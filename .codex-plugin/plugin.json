@@ -1,6 +1,6 @@
 {
   "name": "membrane",
-  "version": "0.1.14796",
+  "version": "0.1.14816",
   "description": "Membrane's plugin for Claude Code and Codex. It brings your Membrane workspaces into your agent, connects your apps on your computer, and shows Membrane's jobs catalog. Installing it needs no sign-up, and your app tokens stay on your computer.",
   "author": {
     "name": "Membrane",
@@ -15,11 +15,10 @@
     "ecommerce"
   ],
   "skills": "./skills/",
-  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Membrane",
     "shortDescription": "Your Membrane workspaces in your agent",
-    "longDescription": "There is a right way to run your operations. Membrane finds it and runs it. This plugin brings Membrane into Claude Code, Codex, or the ChatGPT desktop app. It adds the Membrane server: you sign in once and pick the workspaces your agent may open, and there it answers your requests, reads your knowledge and data tables, and uses your connections. It connects your apps on your computer through Membrane's sign-in page, so each app's client secret stays on Membrane's server and the tokens stay on your computer. It shows Membrane's jobs catalog, and its `membrane` skill tells your agent who Membrane is, what a job costs, and how to hand work over. Installing it needs no Membrane account.",
+    "longDescription": "There is a right way to run your operations. Membrane finds it and runs it. This plugin brings Membrane into Claude Code, Codex, or the ChatGPT desktop app. You sign this computer in once and pick the workspaces your agent may open. There your agent answers your requests, reads your knowledge and data tables, and uses your connections. It connects your apps on your computer through Membrane's sign-in page, so each app's client secret stays on Membrane's server and the tokens stay on your computer. It shows Membrane's jobs catalog, and its `membrane` skill tells your agent who Membrane is, what a job costs, and how to hand work over. Installing it needs no Membrane account.",
     "developerName": "Membrane",
     "category": "Productivity",
     "capabilities": [

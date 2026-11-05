@@ -56,7 +56,7 @@ claude plugin install membrane@membrane
 ## Free and without sign-up
 
 - **Free.** The plugin is free to use, under the MIT license.
-- **No sign-up to install.** Installing needs no Membrane account and no email. The Membrane server asks you to sign in the first time your agent uses it, and it opens only the workspaces you pick. When you connect an app on your computer, you sign in to that app through Membrane's sign-in page, so the app's client secret never sits on your machine.
+- **No sign-up to install.** Installing needs no Membrane account and no email. You sign in only to reach your workspaces, with `membrane login`, and your agent opens only the workspaces you pick. When you connect an app on your computer, you sign in to that app through Membrane's sign-in page, so the app's client secret never sits on your machine.
 - **Your tokens stay on your computer.** The plugin keeps each app's tokens under `~/.membrane/`, and its scripts upload nothing. Membrane receives only what your agent does in the workspaces you picked.
 
 ## Skills
@@ -65,6 +65,7 @@ claude plugin install membrane@membrane
 | --- | --- |
 | Membrane | What Membrane is, what its jobs cost, and how to hand work over to Membrane. |
 | Handoff | Work in the Membrane tab you hand over: your agent joins it, and you watch each step live. |
+| Image editing | Cut a product off its photo backdrop, place it in a lifestyle photo, and check the edges before it goes live. |
 
 ## Requirements
 
@@ -75,14 +76,21 @@ macOS or Linux, on an x64 or arm64 processor. There's nothing to install. If you
 <details>
 <summary>What does the plugin send to Membrane?</summary>
 
-The Membrane server, at `api.membrane.agency/mcp`, receives what your agent does in the workspaces you picked, such as a request it answers and a file it attaches to an answer. The plugin's scripts make four kinds of request, all to `auth.membrane.agency`: the sign-in to an app, the refresh of an expired token, one version check a day, and a read of Membrane's public list of jobs when you ask what Membrane offers. The version check sends the plugin version and nothing else, and asks whether this plugin is old enough to be worth updating. If it is, the agent says so once and carries on.
+Once you sign this computer in with `membrane login`, the plugin's scripts call `api.membrane.agency`. They send the sign-in, the refresh of its token, and a read of the guides Membrane gives your account. They also send each command your agent runs with `membrane run` in the workspaces you picked, such as a request it answers. Their other requests go to `auth.membrane.agency`: the sign-in to an app, the refresh of an expired token, one version check a day, and a read of Membrane's public list of jobs when you ask what Membrane offers. The version check sends the plugin version and nothing else, and asks whether this plugin is old enough to be worth updating. If it is, the agent says so once and carries on.
 
 </details>
 
 <details>
-<summary>How do I sign in to the Membrane server?</summary>
+<summary>How does my agent reach my Membrane workspaces?</summary>
 
-Start a new session after you install the plugin. The first time your agent uses the Membrane server, it asks you to sign in to Membrane and to pick the workspaces it may open. In Claude Code, run `/mcp`, pick the Membrane server, and sign in there. In Codex, run `codex mcp login membrane` in a terminal. You can change the workspaces or disconnect the agent at any time in your Membrane account, under AI agents.
+Sign this computer in with `membrane login` and pick the workspaces your agent may open. Your agent then lists the commands it may run with `membrane commands`, and runs one with `membrane run`. Membrane checks each command against what your account may do. You can change the workspaces or disconnect the agent at any time in your Membrane account, under AI agents.
+
+</details>
+
+<details>
+<summary>What does `membrane login` do?</summary>
+
+It signs this computer in to your Membrane account. It opens Membrane's sign-in page in your browser, and you approve it there and pick the workspaces this computer may open. The tokens stay in `~/.membrane/sign-in.json`, which only your user can read. Your Membrane account lists the sign-in under AI agents, as Membrane CLI, where you can change its workspaces or revoke it. `membrane logout` revokes it from this computer. While you're signed in, the plugin keeps the guides Membrane gives your account in `~/.membrane/guides/`.
 
 </details>
 
