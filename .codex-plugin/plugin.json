@@ -1,6 +1,6 @@
 {
   "name": "membrane",
-  "version": "0.1.14816",
+  "version": "0.1.14835",
   "description": "Membrane's plugin for Claude Code and Codex. It brings your Membrane workspaces into your agent, connects your apps on your computer, and shows Membrane's jobs catalog. Installing it needs no sign-up, and your app tokens stay on your computer.",
   "author": {
     "name": "Membrane",

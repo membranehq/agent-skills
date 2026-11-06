@@ -12,10 +12,13 @@ The person pressed Hand off (⌘J) on a Membrane page and pasted this command he
 one join code, such as `K7QM-4TXR`. From the join on, the person's tab shows every Membrane command
 you run, live, and you can move their view.
 
-Every step below is a `membrane` command. `membrane handoff join` keeps the handoff's workspace on
-this computer. After the join, each `membrane handoff` verb acts in that handoff, and `membrane run`
-runs a workspace command in the handoff's workspace. `membrane run <command> --schema` prints the
-input a command takes, as JSON Schema.
+Every step below is a `membrane` command. You join as the person, not in one workspace: the person
+may have handed over a page in a workspace, or a page outside every workspace, such as the Inbox.
+After the join, each `membrane handoff` verb acts in that handoff, on any page the person has open.
+`membrane run <command> --workspace <key>` runs a workspace command in any workspace the person can
+open, and the person's tab shows it. Without `--workspace`, a workspace command runs in the
+workspace the handoff started in. `membrane run <command> --schema` prints the input a command
+takes, as JSON Schema.
 
 `membrane` is the plugin's own command, the file `scripts/membrane` of the plugin. Run it by its
 full path, because it is not on the PATH: from this skill's folder the path is
@@ -40,10 +43,7 @@ Run `membrane handoff join <code>`. It prints whose tab you joined, the page the
 the verbs that drive the tab.
 
 - If it exits 3 with `not-signed-in` or `sign-in-ended`, run `membrane login`. The person approves
-  the sign-in in their browser and ticks the workspaces this computer may open. Then join again.
-- If it exits 3 with `workspace-not-granted`, this computer may not open the handoff's workspace.
-  Ask the person to tick that workspace for this computer in their Membrane account, under AI
-  agents. Then join again.
+  the sign-in in their browser. Then join again.
 - If it answers that the code is wrong or used up, ask the person to press Hand off again and paste
   the new command.
 - If it answers that this agent already takes part in a handoff, do not end that handoff. One
@@ -57,8 +57,9 @@ done` only if the person tells you to end the other handoff from here.
 - Wait for the person's ask in this chat. The join is not an ask.
 - Before a long step, narrate it in one sentence: `membrane handoff say "<text>"`.
 - Before a step that changes data, move the person to the page that shows the result:
-  `membrane handoff navigate <path>`. A path starts with the same `/w/<workspace>/` part as the
-  paths `membrane handoff where` prints. `membrane handoff open <path>` opens a second page instead;
+  `membrane handoff navigate <path>`. A workspace page's path starts with `/w/<workspace key>/`, as
+  the paths `membrane handoff where` prints, and the move may name another workspace than the one
+  the person is in. `membrane handoff open <path>` opens a second page instead;
   run it only when the person asks for one, because a browser usually blocks a window that no click
   opened. If `membrane handoff where` then lists no new page, tell the person to click the bar at
   the top of their tab and press Open beside that page.
@@ -89,6 +90,8 @@ done` only if the person tells you to end the other handoff from here.
 - Before a write to more than one row, tell the person how many rows you will change and which
   ones, and wait for their yes.
 - The page is the subject of the ask: "this table" means the element of the page they are on.
+- Run each workspace command in the workspace of the page it is about: `--workspace` takes the key
+  that follows `/w/` in that page's path.
 - Read every value fresh with `membrane run query-data-table-records`. A page title is a name, not
   data.
 - Write a row with `membrane run create-data-table-record`, and change one with `membrane run

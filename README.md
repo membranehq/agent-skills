@@ -90,7 +90,7 @@ Sign this computer in with `membrane login` and pick the workspaces your agent m
 <details>
 <summary>What does `membrane login` do?</summary>
 
-It signs this computer in to your Membrane account. It opens Membrane's sign-in page in your browser, and you approve it there and pick the workspaces this computer may open. The tokens stay in `~/.membrane/sign-in.json`, which only your user can read. Your Membrane account lists the sign-in under AI agents, as Membrane CLI, where you can change its workspaces or revoke it. `membrane logout` revokes it from this computer. While you're signed in, the plugin keeps the guides Membrane gives your account in `~/.membrane/guides/`.
+It signs this computer in to your Membrane account. It opens Membrane's sign-in page in your browser, and you approve it there. The sign-in acts as you, so it opens the workspaces you can open. The tokens stay in `~/.membrane/sign-in.json`, which only your user can read. Your Membrane account lists the sign-in under AI agents, as Membrane CLI, where you can revoke it. `membrane logout` revokes it from this computer. While you're signed in, the plugin keeps the guides Membrane gives your account in `~/.membrane/guides/`.
 
 </details>
 

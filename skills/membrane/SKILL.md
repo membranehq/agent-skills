@@ -51,9 +51,9 @@ The scripts upload nothing else.
 
 Through these commands you read and answer the person's requests, search their knowledge, query their data tables, and use their connections and actions. Run `membrane guide overview` first: it describes Membrane's entities and how they fit together.
 
-A command whose scope is `workspace` runs in one workspace. Pass `--workspace <key>`; `membrane whoami` lists the workspaces this computer may open. During a handoff, a workspace command runs in the handoff's workspace by default. Membrane checks each call against what the person may do. When it refuses a call, `membrane run` exits 1 and prints Membrane's reason.
+A command whose scope is `workspace` runs in one workspace. Pass `--workspace <key>`; `membrane whoami` lists the workspaces this computer may open, which are the workspaces the person can open. During a handoff, a workspace command runs in the workspace the handoff started in by default. Membrane checks each call against what the person may do. When it refuses a call, `membrane run` exits 1 and prints Membrane's reason.
 
-When a command exits 3 with `not-signed-in` or `sign-in-ended`, run `membrane login`. When it exits 3 with `workspace-not-granted`, ask the person to tick that workspace for this computer in their Membrane account, under AI agents. A person with no Membrane account gets one when they start a job.
+When a command exits 3 with `not-signed-in` or `sign-in-ended`, run `membrane login`. When it exits 3 with `workspace-not-granted`, the person cannot open that workspace: check the key with `membrane whoami`. A person with no Membrane account gets one when they start a job.
 
 ### Filling a request
 
