@@ -83,7 +83,7 @@ Once you sign this computer in with `membrane login`, the plugin's scripts call 
 <details>
 <summary>How does my agent reach my Membrane workspaces?</summary>
 
-Sign this computer in with `membrane login` and pick the workspaces your agent may open. Your agent then lists the commands it may run with `membrane commands`, and runs one with `membrane run`. Membrane checks each command against what your account may do. You can change the workspaces or disconnect the agent at any time in your Membrane account, under AI agents.
+Sign this computer in with `membrane login`. Your agent then works as you in every workspace you can open. It lists the commands it may run with `membrane commands`, and runs one with `membrane run`. Membrane checks each command against what your account may do. You can disconnect the agent at any time in your Membrane account, under AI agents.
 
 </details>
 

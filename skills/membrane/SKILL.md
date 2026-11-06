@@ -31,7 +31,7 @@ Every command except `membrane catalog` needs a sign-in. `membrane whoami` says 
 
 This plugin signs this computer in to Membrane, runs Membrane commands on that sign-in, and connects the person's apps on their own computer. This version ships no tool that reads a connected app.
 
-`membrane login` signs this computer in to the person's Membrane account. It opens Membrane's consent page in the browser and waits for the approval. The person picks the workspaces this computer may open on that page, and Membrane lists the sign-in under AI agents, as Membrane CLI. If `membrane login` exits 3, the person has not approved yet: ask them to approve, then run it again. `membrane whoami` says who is signed in and which workspaces the sign-in may open. `membrane logout` revokes the sign-in and deletes it from this computer.
+`membrane login` signs this computer in to the person's Membrane account. It opens Membrane's consent page in the browser and waits for the approval. The sign-in acts as the person, in every workspace they can open, and Membrane lists it under AI agents, as Membrane CLI. If `membrane login` exits 3, the person has not approved yet: ask them to approve, then run it again. `membrane whoami` says who is signed in and which workspaces the sign-in may open. `membrane logout` revokes the sign-in and deletes it from this computer.
 
 Membrane gives each signed-in person the agent guides their role may read. The session hook caches them under `~/.membrane/guides/`, and `membrane guide <id>` prints one: its path, the other files beside it, and its text.
 
@@ -65,7 +65,7 @@ When Membrane itself lacks what a step needs, send one record: `membrane run sen
 
 ## Handing the work over
 
-When the person wants Membrane to do a job, give them the job's page from `membrane catalog`. They start the job there, and they get a Membrane account when they start it. After that, `membrane run` reaches their workspace once the person ticks it for this computer: at `membrane login`, or later in their Membrane account, under AI agents.
+When the person wants Membrane to do a job, give them the job's page from `membrane catalog`. They start the job there, and they get a Membrane account when they start it. After that, `membrane run` reaches their workspace once this computer is signed in with `membrane login`.
 
 Never promise a result, a percentage, or a date that Membrane has not stated.
 
