@@ -63,6 +63,25 @@ done` only if the person tells you to end the other handoff from here.
   run it only when the person asks for one, because a browser usually blocks a window that no click
   opened. If `membrane handoff where` then lists no new page, tell the person to click the bar at
   the top of their tab and press Open beside that page.
+- `membrane handoff navigate` waits a few seconds for the tab to report the page it moved to, and
+  only then says "Moved". If it says that the tab has not confirmed the move yet, run
+  `membrane handoff where` before you build on the move.
+- The console paths you move the person to. `<workspace>` is the workspace part of the paths
+  `membrane handoff where` prints, or the workspace key. Never guess another path: a path the
+  console does not know shows "Page not found".
+
+  | Page                       | Path                                               |
+  | -------------------------- | -------------------------------------------------- |
+  | Home of a workspace        | `/w/<workspace>`                                   |
+  | A data table, its records  | `/w/<workspace>/context/tables/<table id>/records` |
+  | A data table, its overview | `/w/<workspace>/context/tables/<table id>`         |
+  | A screen                   | `/w/<workspace>/screens/<screen id>`               |
+  | A job                      | `/w/<workspace>/jobs/<job id>`                     |
+  | The Inbox                  | `/dashboard/inbox`                                 |
+
+  The table id is the `id` that `membrane run list-data-tables` prints. The Inbox is one page for
+  all the person's workspaces.
+
 - Prefer a screen to a table page. While the person follows the handoff, a screen reloads by itself
   when a table it reads gets new rows, so they watch each figure change as your step runs. A table
   page shows a change only when it opens after the change.

@@ -31,7 +31,7 @@ codex plugin marketplace add membranehq/agent-skills
 codex plugin add membrane@membrane
 ```
 
-In Codex or the ChatGPT desktop app, open Settings → Hooks once after installing and turn on the `membrane` hook. Without it the plugin still works, but your agent starts without the short guide to it.
+Then turn on the `membrane` hook, once: type `/hooks` in the Codex CLI, or open Settings → Hooks in the ChatGPT desktop app. Without it the plugin still works, but your agent starts without the short guide to it.
 
 </td>
 </tr>
