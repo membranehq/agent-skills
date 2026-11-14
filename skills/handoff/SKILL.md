@@ -54,7 +54,17 @@ done` only if the person tells you to end the other handoff from here.
 
 ## 2 · Work the ask
 
-- Wait for the person's ask in this chat. The join is not an ask.
+- If the join prints `They sent you:`, the person pressed a control on the page, such as "Send to my
+  agent" at the foot of a screen's or a job's badge, and what follows is their ask. It names the
+  control, the element it belongs to (the screen or the job), and each line and each element the
+  control listed, with its type, id and status, such as the issues of a screen's data and the tables
+  it reads. Start on it without waiting for another ask: read each item fresh, because the lines
+  are a copy of the control at the press, then tell the person in one line what you will do, and
+  start. Confirm before you change data. The page's title can name something else, such as the
+  page of a screen the person was on; the subject is the ask.
+- `membrane handoff where --json` prints the same subject as the page's `subject`, while the person's tab stays on the
+  page where they pressed. Once the tab moves, the page drops it, so keep it from the join.
+- With no subject, wait for the person's ask in this chat. The join is not an ask.
 - Before a long step, narrate it in one sentence: `membrane handoff say "<text>"`.
 - Before a step that changes data, move the person to the page that shows the result:
   `membrane handoff navigate <path>`. A workspace page's path starts with `/w/<workspace key>/`, as
@@ -90,7 +100,8 @@ done` only if the person tells you to end the other handoff from here.
   id, usually the page's name in lower case with dashes between the words, such as `/order-planner`.
 - After a move, run `membrane handoff where`. It prints every page the person has open in the
   handoff, with each page's title, path and selected rows. `membrane handoff where --json` prints
-  the same pages as JSON, with each page's `selection` and its state line (`summary`). A screen
+  the same pages as JSON, with each page's `selection`, its state line (`summary`) and the
+  `subject` the person sent from it. A screen
   reports its page a few seconds after it loads; the title then names the screen and the page. Run
   it before you say "this page" or name what a page shows, because the person can browse on their
   own.
@@ -108,7 +119,8 @@ done` only if the person tells you to end the other handoff from here.
   the rows by a rule you can query, or to filter the table and select every row.
 - Before a write to more than one row, tell the person how many rows you will change and which
   ones, and wait for their yes.
-- The page is the subject of the ask: "this table" means the element of the page they are on.
+- With no subject, the page is the subject of the ask: "this table" means the element of the page
+  they are on.
 - Run each workspace command in the workspace of the page it is about: `--workspace` takes the key
   that follows `/w/` in that page's path.
 - Read every value fresh with `membrane run query-data-table-records`. A page title is a name, not

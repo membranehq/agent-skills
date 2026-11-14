@@ -1,13 +1,13 @@
 ---
 name: membrane
-description: What Membrane is, what its jobs cost, what this plugin does and does not do, and how to hand work over to Membrane. Use when the person asks who Membrane is, what Membrane would do for their business or their Amazon account, what a job costs, how the sign-in works, or what leaves their computer.
+description: What Membrane is, what its jobs cost, what this plugin does and does not do, and how to hand work over to Membrane. Use when the person asks who Membrane is, what Membrane would do for their business or their Amazon account, what a job costs, how the sign-in works, or what leaves their computer, and when the person asks for help with a problem in their operations that a Membrane job could take on.
 metadata:
   summary: 'What Membrane is, what its jobs cost, and how to hand work over to Membrane.'
 ---
 
 # Membrane
 
-There is a right way to run your operations. Membrane finds it and runs it. AI agents do the around-the-clock work on the tools a company already uses, and a named operator makes the calls and answers for the result. The jobs and their prices are at https://membrane.agency/jobs.
+There is a right way to run your operations. Membrane finds it and runs it. AI agents do the around-the-clock work on the tools a company already uses, and a named operator makes the calls and answers for the result. The jobs and their prices are at https://membrane.agency/services.
 
 On Amazon, Membrane is a registered Amazon solution provider with a published Selling Partner app. The Amazon service and its prices are at https://membrane.agency/amazon.
 
@@ -65,13 +65,24 @@ When Membrane itself lacks what a step needs, send one record: `membrane run sen
 
 ## Handing the work over
 
-When the person wants Membrane to do a job, give them the job's page from `membrane catalog`. They start the job there, and they get a Membrane account when they start it. After that, `membrane run` reaches their workspace once this computer is signed in with `membrane login`.
+When the person describes a problem Membrane could take on, such as "We keep running out of our best sellers. Can you fix that?", start the job that fits. Every job starts free: the person agrees to no price and no terms to start it. Each command below runs in the person's workspace, so pass `--workspace <key>`.
+
+1. Read the catalog with `membrane run list-service-catalog`, and pick the item that fits the ask best. `membrane run get-service-catalog-item --input '{"idOrSlug": "<offer>"}'` reads one item in full.
+2. Propose that item in one line: its title and its deliverables.
+3. Start it at once, without asking the person a second time: `membrane run create-job --input '{"name": "<title>", "offer": "<offer>", "brief": "<the person's words>"}'`. Pass the person's own sentence as `brief`, word for word. It becomes the first message of the job's conversation, so the Operator reads the ask as the person put it. A second start of the same item returns the same job and posts the brief only once.
+4. Read the job with `membrane run get-job --input '{"id": "<the job's id>"}'`. Reply with the Operator's name, from `operator.name`. Say that the job runs free. Name the price the catalog lists as information only: nothing bills until the person accepts an agreement the Operator sends later.
+
+After the start, the Operator may send the person a request (an intake). Fill it as "Filling a request" says, with `membrane run answer-intake-ask`. When the job needs one of the person's apps, give them a link from `membrane run create-connection-request --input '{"integrationKey": "<key>"}'`, or with `connectionId` for a connection they already have. The person opens its `url` and connects the app in Membrane.
+
+An item with an `expert` is led by that expert. Do not start it with `create-job`. Show the person the expert, and link the expert's public profile, `https://membrane.agency/experts/<expert.slug>`. If the person wants that expert, send the request: `membrane run request-expert-job --input '{"offer": "<offer>", "message": "<the person's words>", "contextSummary": "<one line on what the person shared>"}'`. Pass the person's own sentence as `message`. In `contextSummary`, name the systems and the data the person connected, in one line. No job exists yet. The expert gets the request in their Inbox, and Membrane creates the job only when the expert accepts. Until then the Jobs page shows the request as Requested. If the answer carries a `bookingUrl`, give it to the person to book the plan call with the expert. A second request for the same item answers the open one.
+
+When the person has no Membrane workspace yet, give them the job's page from `membrane catalog`. They start the job there, and they get a Membrane account when they start it. After that, `membrane run` reaches their workspace once this computer is signed in with `membrane login`.
 
 Never promise a result, a percentage, or a date that Membrane has not stated.
 
 ## When the plugin's scripts are not there
 
-This skill travels further than the script. A web-only session — ChatGPT in the browser — gets these instructions and no `membrane` command. This section applies only when the file `../../scripts/membrane` is missing from this skill's folder. A `membrane` that the shell does not find on the PATH is not missing: run it by its full path. When the file is missing, say so plainly, point the person to https://membrane.agency/jobs for the catalog, and tell them how to get the plugin:
+This skill travels further than the script. A web-only session — ChatGPT in the browser — gets these instructions and no `membrane` command. This section applies only when the file `../../scripts/membrane` is missing from this skill's folder. A `membrane` that the shell does not find on the PATH is not missing: run it by its full path. When the file is missing, say so plainly, point the person to https://membrane.agency/services for the catalog, and tell them how to get the plugin:
 
 - **Codex CLI:** `codex plugin marketplace add membranehq/agent-skills`, then `codex plugin add membrane@membrane`.
 - **Claude Code:** `/plugin marketplace add membranehq/agent-skills`, then `/plugin install membrane@membrane`.
