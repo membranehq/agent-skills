@@ -1,24 +1,24 @@
 {
-  "version": "0.1.15194",
-  "commit": "984a43bffbefcdec9fab86e6b3408249478e74e2",
-  "builtAt": "2026-11-14T17:22:40.422Z",
-  "downloadUrl": "https://github.com/membranehq/agent-skills/releases/download/v0.1.15194",
+  "version": "0.1.15262",
+  "commit": "d25cd4507d387c720fdfa685a94661892f60bdda",
+  "builtAt": "2026-11-17T11:07:04.710Z",
+  "downloadUrl": "https://github.com/membranehq/agent-skills/releases/download/v0.1.15262",
   "executables": {
     "darwin-arm64": {
-      "sha256": "a22bc41f8e18b53ff3cb8ab4e64a0beb66578d2fa7d1245a3db10dcd763702f3",
-      "bytes": 30536015
+      "sha256": "6f799bf893ba490b7ee3e506f76e9a5958a277c20ee07e9af6beebdc6137c002",
+      "bytes": 40229386
     },
     "darwin-x64": {
-      "sha256": "92e4e38002be8c11bf42aca78474323b85e22cfefba7bc2c2133d2e992132220",
-      "bytes": 33225532
+      "sha256": "f4fb846198ae75b80a19f8006b2af552cba09dbbf55f5d59d42d89973f26c886",
+      "bytes": 43346997
     },
     "linux-arm64": {
-      "sha256": "c4c40f735d3fd696fa9078d0b321763e3bd1baa19882e6d53933d5a30e27cc8d",
-      "bytes": 41696948
+      "sha256": "a383d164f40e836f0071bf9d4566118b9ddf24b2dc77f0c379c2789fe249dff6",
+      "bytes": 51434118
     },
     "linux-x64": {
-      "sha256": "74dbcb1e9e9b9a61a5df54303cbe4552a1e6226e637c716ebaa792439284cabe",
-      "bytes": 41978187
+      "sha256": "495dfd5c9e05f458510e7f4def0ca62465281509135b12d4842a96254008e7b8",
+      "bytes": 51663376
     }
   }
 }
